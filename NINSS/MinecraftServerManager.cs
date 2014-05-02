@@ -58,8 +58,19 @@ namespace NINSS
 			while(MainClass.serverManager.mcProcess != null)
 			{
 				string message = System.Console.ReadLine();
-				if(message.Length > 0 && message[0] == '!')
-					MinecraftConnector.OnServerMessage("[XX:XX:XX] [NINSS/onCommand]: <Console> "+message);
+				if(message.Length > 0 && message[0] == '!' && MainClass.serverManager.OnServerMessage != null)
+				{
+					try
+					{
+						MainClass.serverManager.OnServerMessage("[XX:XX:XX] [NINSS/onCommand]: <Console> "+message);
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine("\nError while calling Event!");
+						Console.WriteLine("Error: "+ex.Message);
+						Console.WriteLine("Stacktrace:\n"+ex.StackTrace+"\n");
+					}
+				}
 				else
 					MainClass.serverManager.writeMessage(message);
 			}

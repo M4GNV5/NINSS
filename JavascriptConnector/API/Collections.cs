@@ -17,6 +17,10 @@ namespace JavascriptConnector
 					array[index] = value;
 				}
 			}
+			/// <summary>
+			/// Get the length of the array
+			/// </summary>
+			/// <value>The length of the array</value>
 			public int length
 			{
 				get
@@ -27,18 +31,36 @@ namespace JavascriptConnector
 			}
 			public Array()
 			{}
+			/// <summary>
+			/// Creates new array with specific length
+			/// </summary>
+			/// <param name="length">Length of the Array</param>
 			public Array (int count)
 			{
 				array = new string[count];
 			}
+			/// <summary>
+			/// Creates new array with specific length
+			/// </summary>
+			/// <returns>The new Array</returns>
+			/// <param name="length">Length of the Array</param>
 			public Array getNew(int length)
 			{
 				return new Array(length);
 			}
+			/// <summary>
+			/// Get the value at the specific index
+			/// </summary>
+			/// <param name="index">Index</param>
 			public object get(int index)
 			{
 				return array[index];
 			}
+			/// <summary>
+			/// Sets the value at the specific index
+			/// </summary>
+			/// <param name="index">Index</param>
+			/// <param name="value">Value</param>
 			public void set(int index, object value)
 			{
 				array[index] = value;
@@ -58,6 +80,10 @@ namespace JavascriptConnector
 					list[index] = value;
 				}
 			}
+			/// <summary>
+			/// Get the count of the list
+			/// </summary>
+			/// <value>The count of the list</value>
 			public int Count
 			{
 				get
@@ -67,34 +93,65 @@ namespace JavascriptConnector
 				set
 				{}
 			}
+			/// <summary>
+			/// Initializes a new instance of the <see cref="JavascriptConnector.API.List"/> class.
+			/// </summary>
 			public List()
 			{
 				list = new System.Collections.Generic.List<object>();
 			}
+			/// <summary>
+			/// Initializes a new instance of the <see cref="JavascriptConnector.API.List"/> class.
+			/// </summary>
+			/// <returns>The new List</returns>
 			public List getNew()
 			{
 				return new List();
 			}
+			/// <summary>
+			/// Get the value at the specific index
+			/// </summary>
+			/// <param name="index">Index</param>
 			public object get(int index)
 			{
 				return list[index];
 			}
+			/// <summary>
+			/// Set the value at the specific index
+			/// </summary>
+			/// <param name="index">Index</param>
+			/// <param name="value">Value</param>
 			public void set(int index, object value)
 			{
 				list[index] = value;
 			}
-			public void Add(string item)
+			/// <summary>
+			/// Add a new value
+			/// </summary>
+			/// <param name="item">Item</param>
+			public void Add(object item)
 			{
 				list.Add(item);
 			}
-			public void Remove(string item)
+			/// <summary>
+			/// Remove an Item
+			/// </summary>
+			/// <param name="item">Item</param>
+			public void Remove(object item)
 			{
 				list.Remove(item);
 			}
+			/// <summary>
+			/// Remove an Item at index
+			/// </summary>
+			/// <param name="i">Index</param>
 			public void RemoveAt(int i)
 			{
 				list.RemoveAt(i);
 			}
+			/// <summary>
+			/// Clears the List
+			/// </summary>
 			public void Clear()
 			{
 				list.Clear();
@@ -114,6 +171,10 @@ namespace JavascriptConnector
 					dictionary[index] = value;
 				}
 			}
+			/// <summary>
+			/// Get the count of the dictionary
+			/// </summary>
+			/// <value>The count of the dictionary</value>
 			public int Count
 			{
 				get
@@ -123,30 +184,57 @@ namespace JavascriptConnector
 				set
 				{}
 			}
+			/// <summary>
+			/// Initializes a new instance of the <see cref="JavascriptConnector.API.Dictionary"/> class.
+			/// </summary>
 			public Dictionary()
 			{
 				dictionary = new System.Collections.Generic.Dictionary<object, object>();
 			}
+			/// <summary>
+			/// Initializes a new instance of the <see cref="JavascriptConnector.API.Dictionary"/> class.
+			/// </summary>
 			public Dictionary getNew()
 			{
 				return new Dictionary();
 			}
+			/// <summary>
+			/// Get the value with specific key
+			/// </summary>
+			/// <param name="key">Key</param>
 			public object get(object key)
 			{
 				return dictionary[key];
 			}
+			/// <summary>
+			/// Set the value at the specific key
+			/// </summary>
+			/// <param name="key">Key</param>
+			/// <param name="value">Value</param>
 			public void set(object key, object value)
 			{
 				dictionary[key] = value;
 			}
+			/// <summary>
+			/// Adds a new value with specific key
+			/// </summary>
+			/// <param name="key">Key</param>
+			/// <param name="value">Value</param>
 			public void Add(object key, object value)
 			{
 				dictionary.Add(key, value);
 			}
+			/// <summary>
+			/// Removes a value with specific key
+			/// </summary>
+			/// <param name="key">Key</param>
 			public void Remove(object key)
 			{
 				dictionary.Remove(key);
 			}
+			/// <summary>
+			/// Clears the dictionary
+			/// </summary>
 			public void Clear()
 			{
 				dictionary.Clear();
@@ -154,4 +242,6 @@ namespace JavascriptConnector
 		}
 	}
 }
+
+
 

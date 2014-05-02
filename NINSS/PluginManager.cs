@@ -4,6 +4,9 @@ namespace NINSS
 {
 	public class PluginManager
 	{
+		/// <summary>
+		/// List of all loaded Plugins
+		/// </summary>
 		public System.Collections.Generic.Dictionary<string, object> plugins {get; internal set;}
 		public PluginManager ()
 		{
@@ -20,10 +23,18 @@ namespace NINSS
 			else
 				Console.WriteLine("No Plugins found!");
 		}
+		/// <summary>
+		/// Unloads a plugin
+		/// </summary>
+		/// <param name="name">Plugin name</param>
 		public void unloadPlugin(string name)
 		{
 			plugins.Remove(name);
 		}
+		/// <summary>
+		/// Loads a plugin
+		/// </summary>
+		/// <param name="name">Plugin name</param>
 		public void loadPlugin(string name)
 		{
 			try
@@ -37,8 +48,17 @@ namespace NINSS
 				plugins.Add(name, Activator.CreateInstance(type));
 				Console.WriteLine("Loaded Plugin: "+name+".dll");
 			}
-			catch (Exception e) {Console.WriteLine("\nCould not load Plugin: "+name+"\nError: "+e.Message+"\nStacktrace:\n"+e.StackTrace+"\n");}
+			catch (Exception e)
+			{
+				Console.WriteLine("\nCould not load Plugin: "+name+"\n"+e.GetType().ToString()+": "+e.Message+"\nStacktrace:\n"+e.StackTrace+"\n");
+				if(e.InnerException != null)
+					Console.WriteLine("InnerException: "+e.InnerException.Message);
+			}
 		}
+		/// <summary>
+		/// Reloads a plugin
+		/// </summary>
+		/// <param name="name">Plugin name</param>
 		public void reloadPlugin(string name)
 		{
 			unloadPlugin(name);

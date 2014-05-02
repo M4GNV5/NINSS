@@ -4,17 +4,41 @@ namespace NINSS
 	public class MinecraftConnector
 	{
 		public delegate void PlayerEvent(string Player, string args);
+		/// <summary>
+		/// Occurs when a player joins
+		/// </summary>
 		public static event PlayerEvent OnPlayerJoin;
+		/// <summary>
+		/// Occurs when a player leaves
+		/// </summary>
 		public static event PlayerEvent OnPlayerLeave;
+		/// <summary>
+		/// Occurs when a player is teleported to coordinates
+		/// </summary>
 		public static event PlayerEvent OnPlayerPosition;
+		/// <summary>
+		/// Occurs when a player says something in chat
+		/// </summary>
 		public static event PlayerEvent OnChat;
+		/// <summary>
+		/// Occurs when a player writes a command in chat
+		/// </summary>
 		public static event PlayerEvent OnCommand;
 
 		public delegate void ServerEvent();
+		/// <summary>
+		/// Occurs when the server starts
+		/// </summary>
 		public static event ServerEvent OnStart;
+		/// <summary>
+		/// Occurs when on stops
+		/// </summary>
 		public static event	ServerEvent OnStop;
 
 		public delegate void messageRead(string message);
+		/// <summary>
+		/// List of all methods that will be invoked when a server output contains the specific key string
+		/// </summary>
 		public static System.Collections.Generic.Dictionary<string, messageRead> messageReader = new System.Collections.Generic.Dictionary<string, messageRead>
 		{
 			{"joined the game", readJoin},

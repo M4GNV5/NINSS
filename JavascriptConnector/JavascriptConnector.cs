@@ -20,19 +20,19 @@ namespace JavascriptConnector
 		
 		public void onJoin(string name, string misc)
 		{
-			manager.executeAll("onJoin(\""+name+"\"); ");
+			manager.executeAll("onJoin(\""+name+"\");");
 		}
 		public void onLeave(string name, string misc)
 		{
-			manager.executeAll("onLeave(\""+name+"\"); ");
+			manager.executeAll("onLeave(\""+name+"\");");
 		}
 		public void onPosition(string name, string position)
 		{
-			manager.executeAll("onPosition(\""+name+"\", \""+position+"\"); ");
+			manager.executeAll("onPosition(\""+name+"\", \""+position+"\");");
 		}
 		public void onChat(string name, string message)
 		{
-			manager.executeAll("onChat(\""+name+"\", \""+message+"\"); ");
+			manager.executeAll("onChat(\""+name+"\", \""+message+"\");");
 		}
 		public void onCommand(string name, string args)
 		{
@@ -42,16 +42,17 @@ namespace JavascriptConnector
 				manager.unloadPlugin(args.Split(' ')[1]);
 			else if(args.Split(' ')[0] == "load" && args.Split(' ').Length > 1)
 				manager.loadPlugin("./plugins/"+args.Split(' ')[1]);
-			manager.executeAll("onCommand(\""+name+"\", \""+args+"\"); ");
+			manager.executeAll("onCommand(\""+name+"\", \""+args+"\");");
 		}
 		
 		public void onStart()
 		{
-			manager.executeAll("onStart(); ");
+			manager.executeAll("onStart();");
 		}
 		public void onStop()
 		{
-			manager.executeAll("onStop(); ");
+			manager.executeAll("onStop();");
 		}
 	}
 }
+

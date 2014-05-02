@@ -6,7 +6,11 @@ namespace JavascriptConnector
 {
 	public class JavascriptPluginManager
 	{
+		/// <summary>
+		/// List of all loaded Javascript Plugins
+		/// </summary>
 		public System.Collections.Generic.Dictionary<string, string> plugins {get; internal set;}
+		public JavascriptContext javascriptContext;
 		public JavascriptPluginManager ()
 		{
 			plugins = new System.Collections.Generic.Dictionary<string, string>();
@@ -22,48 +26,85 @@ namespace JavascriptConnector
 			}
 			else
 				Console.WriteLine("\nNo Javascript Plugins found!");
+			javascriptContext = new JavascriptContext();
+			addJsReferences(System.Reflection.Assembly.GetAssembly(typeof(MainClass)), "NINSS.API", ref javascriptContext);
+			addJsReferences(System.Reflection.Assembly.GetAssembly(typeof(JavascriptConnector)), "JavascriptConnector.API", ref javascriptContext);
 		}
+		/// <summary>
+		/// Unloads a Javascript plugin
+		/// </summary>
+		/// <param name="name">Plugin name</param>
 		public void unloadPlugin(string name)
 		{
 			plugins.Remove(name);
 			Console.WriteLine("Unloaded Plugin: "+name+".js");
 		}
+		/// <summary>
+		/// Loads a Javascript plugin
+		/// </summary>
+		/// <param name="name">Plugin name</param>
 		public void loadPlugin(string name)
 		{
 			plugins.Add(name, File.ReadAllText("./plugins/"+name+".js"));
-			Console.WriteLine("Loaded Javascript Plugin: "+name);
+			Console.WriteLine("Loaded Javascript Plugin: "+name+".js");
 		}
+		/// <summary>
+		/// Reloads a Javascript plugin
+		/// </summary>
+		/// <param name="name">Plugin name</param>
 		public void reloadPlugin(string name)
 		{
 			unloadPlugin(name);
 			loadPlugin(name);
 		}
-
+		/// <summary>
+		/// Executes a function in all loaded Javascript plugins
+		/// </summary>
+		/// <param name="function">Function name</param>
 		public void executeAll(string function)
 		{
 			foreach(string key in plugins.Keys)
-				execute(key, function);
+				execute(key, function, javascriptContext);
 		}
+		/// <summary>
+		/// Executes a function in all loaded Javascript plugins with specific libraries
+		/// </summary>
+		/// <param name="function">Function name</param>
+		/// <param name="jsContext">Javascript context with custom libraries</param>
 		public void executeAll(string function, JavascriptContext jsContext)
 		{
 			foreach(string key in plugins.Keys)
 				execute(key, function, jsContext);
 		}
+		/// <summary>
+		/// Executes a function in specific plugin
+		/// </summary>
+		/// <param name="plugin">Plugin name</param>
+		/// <param name="function">Function name</param>
 		public void execute(string plugin, string function)
 		{
-			JavascriptContext context = new JavascriptContext();
-			addJsReferences(System.Reflection.Assembly.GetAssembly(typeof(MainClass)), "NINSS.API", ref context);
-			addJsReferences(System.Reflection.Assembly.GetAssembly(typeof(JavascriptConnector)), "JavascriptConnector.API", ref context);
-			execute(plugin, function, context);
+			execute(plugin, function, javascriptContext);
 		}
+		/// <summary>
+		/// Executes a function in specific plugin with specific libraries
+		/// </summary>
+		/// <param name="plugin">Plugin name</param>
+		/// <param name="function">Function name</param>
+		/// <param name="jsContext">Javascript context with custom libraries</param>
 		public void execute(string plugin, string function, JavascriptContext jsContext)
 		{
 			if(!plugins.ContainsKey(plugin))
 				return;
 			else if(!plugins[plugin].Contains(function.Split('(')[0].Trim()))
 				return;
-			jsContext.Run(function+plugins[plugin]);
+			jsContext.Run(function+" "+plugins[plugin]);
 		}
+		/// <summary>
+		/// Adds all Classes in the assembly with the specific namespace to the specific JavascriptContext
+		/// </summary>
+		/// <param name="assembly">Assembly</param>
+		/// <param name="_namespace">Namespace</param>
+		/// <param name="jsContext">Javascript Context</param>
 		public void addJsReferences(System.Reflection.Assembly assembly, string _namespace, ref JavascriptContext jsContext)
 		{
 			foreach(System.Type type in assembly.GetTypes())
@@ -73,4 +114,6 @@ namespace JavascriptConnector
 		}
 	}
 }
+
+
 
