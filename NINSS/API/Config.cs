@@ -8,15 +8,14 @@ namespace NINSS
 		{
 			XmlDocument doc;
 			XmlNode rootNode;
-			public Config (string file)
+			public Config()
 			{
 				doc = new XmlDocument();
-				if(!System.IO.File.Exists(file))
-				{
-					createNewConfig();
-					saveConfig(file);
-				}
-				doc.Load(file);
+			}
+			public Config (string name)
+			{
+				doc = new XmlDocument();
+				loadConfig(name);
 				rootNode = doc.GetElementsByTagName("root")[0];
 			}
 			/// <summary>
@@ -55,18 +54,24 @@ namespace NINSS
 			/// <summary>
 			/// Saves the config
 			/// </summary>
-			/// <param name="file">File path</param>
-			public void saveConfig(string file)
+			/// <param name="file">Config name</param>
+			public void saveConfig(string name)
 			{
-				doc.Save(file);
+				doc.Save(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml");
 			}
 			/// <summary>
 			/// Loads a config
 			/// </summary>
-			/// <param name="file">File path</param>
-			public void loadConfig(string file)
+			/// <param name="file">Config name</param>
+			public void loadConfig(string name)
 			{
-				doc.Load(file);
+				if(!System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml"))
+				{
+					createNewConfig();
+					saveConfig(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml");
+				}
+				else
+					doc.Load(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml");
 			}
 		}
 	}

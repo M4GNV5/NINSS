@@ -23,7 +23,7 @@ namespace NINSS
 					Console.ReadKey();
 					Environment.Exit(0);
 				}
-				Config config = new Config(AppDomain.CurrentDomain.BaseDirectory+"NINASS_config.xml");
+				Config config = new Config("..\\..\\NINASS_config");
 				if(config.getValue("EnablePlugins") == "true")
 					pluginManager = new PluginManager();
 				try

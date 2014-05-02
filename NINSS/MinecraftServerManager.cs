@@ -8,8 +8,8 @@ namespace NINSS
 		internal System.Diagnostics.Process mcProcess;
 		internal MinecraftServerManager (string jarFile)
 		{
-			string executable = new API.Config("NINASS_config.xml").getValue("JavaExecutable");
-			string arguments = new API.Config("NINASS_config.xml").getValue("JavaArguments").Replace("%jar%", "\""+jarFile+"\"");
+			string executable = new API.Config("..\\..\\NINASS_config").getValue("JavaExecutable");
+			string arguments = new API.Config("..\\..\\NINASS_config").getValue("JavaArguments").Replace("%jar%", "\""+jarFile+"\"");
 			Console.WriteLine("\nStarting java with arguments: "+arguments+"\n");
 			OnServerMessage += MinecraftConnector.OnServerMessage;
 			OnServerMessage += outputMessage;
