@@ -5,6 +5,6 @@ NINSS stands for "NINSS is no serversoftware". NINSS is a Minecraft Server Wrapp
 
 Latest (01.05.2014) Binary Download can be found here https://dl.dropboxusercontent.com/u/72274197/NINSS.zip
 
-Documentation can be found in the Github Wiki: https://github.com/M4GV5/NINSS/wiki
+Documentation can be found here: http://m4gnv5.tk/NINSS/
 
 License: https://github.com/M4GV5/NINSS/blob/master/LICENSE
