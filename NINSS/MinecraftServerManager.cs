@@ -12,7 +12,6 @@ namespace NINSS
 			string arguments = new API.Config("..\\..\\NINASS_config").getValue("JavaArguments").Replace("%jar%", "\""+jarFile+"\"");
 			Console.WriteLine("\nStarting java with arguments: "+arguments+"\n");
 			OnServerMessage += MinecraftConnector.OnServerMessage;
-			OnServerMessage += outputMessage;
 			mcProcess = new System.Diagnostics.Process();
 			mcProcess.StartInfo = new System.Diagnostics.ProcessStartInfo(executable, arguments);
 			mcProcess.StartInfo.UseShellExecute = false;
@@ -28,6 +27,7 @@ namespace NINSS
 		}
 		internal void readMessage(object sender, System.Diagnostics.DataReceivedEventArgs e)
 		{
+			Console.WriteLine(e.Data.Remove(0, 12).Replace(e.Data.Remove(0, 12).Split(':')[0], "").Trim(':', ' ', '[', ']'));
 			if(OnServerMessage != null && e.Data != null)
 			{
 				try
@@ -45,13 +45,6 @@ namespace NINSS
 		internal void writeMessage(string message)
 		{
 			mcProcess.StandardInput.WriteLine(message);
-		}
-		internal void outputMessage(string message)
-		{
-			message = message.Remove(0, 12);
-			message = message.Replace(message.Split(':')[0], "");
-			message = message.Trim(':', ' ', '[', ']');
-			Console.WriteLine(message);
 		}
 		internal static void readInputs()
 		{

@@ -6,8 +6,8 @@ namespace NINSS
 	{
 		public class Config
 		{
-			XmlDocument doc;
-			XmlNode rootNode;
+			public XmlDocument doc;
+			public XmlNode rootNode;
 			public Config()
 			{
 				doc = new XmlDocument();
@@ -68,7 +68,7 @@ namespace NINSS
 				if(!System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml"))
 				{
 					createNewConfig();
-					saveConfig(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml");
+					saveConfig(name);
 				}
 				else
 					doc.Load(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml");

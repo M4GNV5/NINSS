@@ -52,7 +52,7 @@ namespace NINSS
 			{
 				Console.WriteLine("\nCould not load Plugin: "+name+"\n"+e.GetType().ToString()+": "+e.Message+"\nStacktrace:\n"+e.StackTrace+"\n");
 				if(e.InnerException != null)
-					Console.WriteLine("InnerException: "+e.InnerException.Message);
+					Console.WriteLine("InnerException: "+e.InnerException.Message+"\nInner Stacktrace:\n"+e.InnerException.StackTrace);
 			}
 		}
 		/// <summary>

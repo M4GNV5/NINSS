@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <ServerFile>%auto%</ServerFile>
+  <JavaExecutable>java.exe</JavaExecutable>
+  <JavaArguments>-jar %jar% nogui</JavaArguments>
+  <EnablePlugins>true</EnablePlugins>
+</root>

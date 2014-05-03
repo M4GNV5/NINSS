@@ -99,6 +99,10 @@ namespace JavascriptConnector
 				return;
 			jsContext.Run(function+" "+plugins[plugin]);
 		}
+		public void addJsReferences(System.Reflection.Assembly assembly, string _namespace)
+		{
+			addJsReferences(assembly, _namespace, ref javascriptContext);
+		}
 		/// <summary>
 		/// Adds all Classes in the assembly with the specific namespace to the specific JavascriptContext
 		/// </summary>

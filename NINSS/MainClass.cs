@@ -18,7 +18,7 @@ namespace NINSS
 			{
 				if(!File.Exists(AppDomain.CurrentDomain.BaseDirectory+"NINASS_config.xml"))
 				{
-					Console.WriteLine("Missing NINASS_config.xml!\nPlease use the one from the .zip File you downloaded!");
+					Console.WriteLine("Missing NINASS_config.xml!\nPlease use and edit the one github!");
 					Console.WriteLine("Press any key to exit");
 					Console.ReadKey();
 					Environment.Exit(0);

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--Example Permission File-->
+<Permission_config>
+	<group name="Admin" default="false"> <!-- Admin Group-->
+		<permission>*</permission> <!-- * means all permissions. examples.* means all permissions that start with examples.-->
+		<member>TheLittleMagnus</member> <!--thats me-->
+		<member>Notch</member>
+	</group>
+	<group name="User" default="true"> <!-- User Group-->
+	</group>
+</Permission_config>
