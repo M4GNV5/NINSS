@@ -6,6 +6,9 @@ using System.Runtime.InteropServices;
 
 namespace NINSS
 {
+	/// <summary>
+	/// Main class
+	/// </summary>
 	public class MainClass
 	{
 		private static System.Threading.Thread inputThread;

@@ -4,6 +4,9 @@ namespace NINSS
 {
 	namespace API
 	{
+		/// <summary>
+		/// Config class that allows you to get and set values of simple XML configuration files
+		/// </summary>
 		public class Config
 		{
 			public XmlDocument doc;
@@ -29,6 +32,13 @@ namespace NINSS
 					return doc.GetElementsByTagName(name)[0].InnerText;
 				else
 					return null;
+			}
+			public string[] getValues()
+			{
+				System.Collections.Generic.List<string> values = new System.Collections.Generic.List<string>();
+				foreach(XmlNode node in rootNode.ChildNodes)
+					values.Add(node.Name);
+				return values.ToArray();
 			}
 			/// <summary>
 			/// Sets the value of a node or creates a new node in the configuration file

@@ -4,6 +4,9 @@ using NINSS;
 using Noesis.Javascript;
 namespace JavascriptConnector
 {
+	/// <summary>
+	/// PluginManager class that loads, undloads and holds all Javascript Plugins
+	/// </summary>
 	public class JavascriptPluginManager
 	{
 		/// <summary>

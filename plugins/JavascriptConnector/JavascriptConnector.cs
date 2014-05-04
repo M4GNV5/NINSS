@@ -2,6 +2,9 @@ using System;
 using NINSS;
 namespace JavascriptConnector
 {
+	/// <summary>
+	/// Javascript connector class that calls the events in all javascript plugins
+	/// </summary>
 	public class JavascriptConnector
 	{
 		public JavascriptPluginManager manager;

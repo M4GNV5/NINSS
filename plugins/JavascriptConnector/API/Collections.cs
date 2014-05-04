@@ -3,6 +3,9 @@ namespace JavascriptConnector
 {
 	namespace API
 	{
+		/// <summary>
+		/// Array class that can be used to store data in arrays
+		/// </summary>
 		public class Array
 		{
 			private object[] array;
@@ -66,6 +69,9 @@ namespace JavascriptConnector
 				array[index] = value;
 			}
 		}
+		/// <summary>
+		/// List class that can be used to store data in lists
+		/// </summary>
 		public class List
 		{
 			private System.Collections.Generic.List<object> list;
@@ -157,6 +163,9 @@ namespace JavascriptConnector
 				list.Clear();
 			}
 		}
+		/// <summary>
+		/// Dictionary class that can be used to store data in dictionaries
+		/// </summary>
 		public class Dictionary
 		{
 			private System.Collections.Generic.Dictionary<object, object> dictionary;

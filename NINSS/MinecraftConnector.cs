@@ -1,6 +1,9 @@
 using System;
 namespace NINSS
 {
+	/// <summary>
+	/// Class that handles Server output and translate it to events
+	/// </summary>
 	public class MinecraftConnector
 	{
 		public delegate void PlayerEvent(string Player, string args);

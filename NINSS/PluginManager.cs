@@ -2,6 +2,9 @@ using System;
 using System.IO;
 namespace NINSS
 {
+	/// <summary>
+	/// PluginManager class that loads, undloads and holds all .NET Plugins
+	/// </summary>
 	public class PluginManager
 	{
 		/// <summary>
@@ -10,6 +13,7 @@ namespace NINSS
 		public System.Collections.Generic.Dictionary<string, object> plugins {get; internal set;}
 		public PluginManager ()
 		{
+			AppDomain.CurrentDomain.AssemblyResolve += onAssemblyResolve;
 			if(!Directory.Exists("./plugins"))
 				Directory.CreateDirectory("./plugins");
 			if(Directory.GetFiles("./plugins", "*.dll").Length > 0)
@@ -23,6 +27,21 @@ namespace NINSS
 			else
 				Console.WriteLine("No Plugins found!");
 		}
+		/// <summary>
+		/// Loads missing assemblies
+		/// </summary>
+		/// <returns>The Assembly</returns>
+		/// <param name="sender">Sender</param>
+		/// <param name="e">Resolve Event Arguments</param>
+		public System.Reflection.Assembly onAssemblyResolve(object sender, ResolveEventArgs e)
+		{
+			foreach(System.Reflection.Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+				if(assembly.FullName == e.Name)
+					return assembly;
+			string name = new System.Reflection.AssemblyName(e.Name).Name;
+			return System.Reflection.Assembly.LoadFile(AppDomain.CurrentDomain.BaseDirectory+"plugins\\libs\\"+name+".dll");
+		}
+
 		/// <summary>
 		/// Unloads a plugin
 		/// </summary>

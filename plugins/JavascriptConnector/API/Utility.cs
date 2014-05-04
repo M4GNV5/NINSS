@@ -2,6 +2,9 @@ namespace JavascriptConnector
 {
 	namespace API
 	{
+		/// <summary>
+		/// Console class to interact with the Console
+		/// </summary>
 		public class Console
 		{
 			public Console ()
