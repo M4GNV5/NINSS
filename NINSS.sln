@@ -5,13 +5,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NINSS", "NINSS\NINSS.csproj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{4D356B36-5058-46EB-9049-F42F225FA457}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavascriptConnector", "JavascriptConnector\JavascriptConnector.csproj", "{F402D309-2B68-4E2C-82C8-13BF9DBE03B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavascriptConnector", "plugins\JavascriptConnector\JavascriptConnector.csproj", "{F402D309-2B68-4E2C-82C8-13BF9DBE03B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePermissions", "SimplePermissions\SimplePermissions.csproj", "{269BCD64-F4FA-45A7-8106-D39DF71CBA72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePermissions", "plugins\SimplePermissions\SimplePermissions.csproj", "{269BCD64-F4FA-45A7-8106-D39DF71CBA72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UuidConnector", "UuidConnector\UuidConnector.csproj", "{F5F95FE9-B83B-4F94-B5F1-3F13FFD8FB71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UuidConnector", "plugins\UuidConnector\UuidConnector.csproj", "{F5F95FE9-B83B-4F94-B5F1-3F13FFD8FB71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{6AE20DE9-BE11-4876-9918-6D17820F761C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "plugins\WebUI\WebUI.csproj", "{6AE20DE9-BE11-4876-9918-6D17820F761C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

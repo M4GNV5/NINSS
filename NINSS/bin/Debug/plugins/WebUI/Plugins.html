@@ -5,23 +5,30 @@
 
     <title>NINSS Server Configuration</title>
 
-    <!-- Bootstrap core CSS -->
     <link href="bootstrap\css\bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <script type="text/javascript">
+      function displayPlugins()
+      {
+        for(var i = 0; i < document.pluginList.length; i++)
+          addPlugin(i+1, document.pluginList[i]);
+      }
+      function addPlugin(count, name)
+      {
+        var config = "?";
+        for(var i = 0; i < document.configList.length; i++)
+          if(document.configList[i].toLowerCase() == name.toLowerCase())
+            config = document.configList[i];
+        if(config == "?")
+          document.getElementById('plugins').innerHTML += "<tr><td>"+count+"</td><td>"+name+"</td><td>"+config+"</td></tr>";
+        else
+          document.getElementById('plugins').innerHTML += "<tr><td>"+count+"</td><td>"+name+"</td><td><a href=\"Config.html?-?"+config+"\">"+config+"</a></td></tr>";
+      }
+    </script>
   </head>
 
-  <body onload="loadConfigs( function() {} );">
+  <body onload="loadConfigs( function() {loadPlugins(displayPlugins);} );">
 
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
@@ -49,9 +56,9 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="index.html">Dashboard</a></li>
+            <li><a href="index.html">Dashboard</a></li>
             <li><a href="Console.html">Console</a></li>
-            <li><a href="Plugins.html">Plugins</a></li>
+            <li  class="active"><a href="Plugins.html">Plugins</a></li>
             <li><a href="Configuration.html">Configuration</a></li>
           </ul>
           <ul class="nav nav-sidebar" id="configs">
@@ -59,25 +66,26 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h2 class="sub-header">Dashboard</h2>
-          <p>This is the configuration Panel for your NINSS Minecraft server.<br />
-            Console is <a href="Console.html">here</a><br />
-            Plugins <a href="Plugins.html">here</a><br />
-            and Configuration can be done <a href="Configuration.html">here</a><br />
-            <br />
-            For help using NINSS visit our github page <a href="https://github.com/M4GV5/NINSS/">here</a><br />
-            You can post Issues <a href="https://github.com/M4GV5/NINSS/issues">here</a>
-          </p>
+
+          <h2 class="sub-header">Plugins</h2>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Config</th>
+                </tr>
+              </thead>
+              <tbody id="plugins">
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="bootstrap\js\jquery.min.js"></script>
     <script src="bootstrap\js\bootstrap.min.js"></script>
     <script src="loader.js"></script>
-    <!--<script src="./bootstrap/js/js/docs.min.js"></script>-->
   </body>
 </html>

@@ -6,6 +6,10 @@ namespace WebUI
 	{
 		private Thread serverThread;
 		public delegate bool action(string url, HttpProcessor p);
+		public static System.Collections.Generic.Dictionary<string, string> mineTypes = new System.Collections.Generic.Dictionary<string, string>()
+		{
+			{"js", "text/javascript"}
+		};
 		public static action onAction;
 		public WebUI ()
 		{
@@ -14,12 +18,20 @@ namespace WebUI
 			onAction += configAction;
 			onAction += configsAction;
 			onAction += configListAction;
-
-			NINSS.API.Config config = new NINSS.API.Config("WebUI");
-			System.Net.IPAddress.TryParse(config.getValue("IP_Adress"), out ip);
-			port = Convert.ToInt32(config.getValue("Port"));
-			serverThread = new Thread(new ThreadStart(listen));
-			serverThread.Start();
+			try
+			{
+				NINSS.API.Config config = new NINSS.API.Config("WebUI");
+				System.Net.IPAddress.TryParse(config.getValue("IP_Adress"), out ip);
+				port = Convert.ToInt32(config.getValue("Port"));
+				serverThread = new Thread(new ThreadStart(listen));
+				serverThread.Start();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("\nError loading WebUI: "+e.GetType().ToString()+": "+e.Message+"\nStacktrace:\n"+e.StackTrace+"\n");
+				if(e.InnerException != null)
+					Console.WriteLine("InnerException: "+e.InnerException.Message+"\nInner Stacktrace:\n"+e.InnerException.StackTrace);
+			}
 		}
 
 		public override void handleGETRequest (HttpProcessor p)
@@ -32,7 +44,7 @@ namespace WebUI
 						return;
 			if(file == "")
 				file = "index.html";
-			file = AppDomain.CurrentDomain.BaseDirectory+"plugins\\WebUI\\"+file;
+			file = AppDomain.CurrentDomain.BaseDirectory+"plugins\\WebUI\\"+file.Split('?')[0];
 			if(!System.IO.File.Exists(file))
 			{
 				p.writeSuccess("text/html");
@@ -40,7 +52,10 @@ namespace WebUI
 			}
 			else
 			{
-				p.writeSuccess("text/html");
+				if(mineTypes.ContainsKey(file.Split('.')[file.Split('.').Length-1]))
+					p.writeSuccess(mineTypes[file.Split('.')[file.Split('.').Length-1]]);
+				else
+					p.writeSuccess("text/"+file.Split('.')[file.Split('.').Length-1]);
 				foreach(string line in System.IO.File.ReadAllLines(file))
 					p.outputStream.WriteLine(line);
 			}
@@ -71,7 +86,7 @@ namespace WebUI
 			if(url.Split('?').Length != 3 || url.Split('?')[1] != "command")
 				return false;
 			p.writeSuccess("text/html");
-			NINSS.API.Server.runCommand(url.Split('?')[2].Replace("+", " "));
+			NINSS.API.Server.runCommand(url.Split('?')[2].Replace("%20", " "));
 			p.outputStream.WriteLine("true");
 			return true;
 		}
@@ -82,7 +97,7 @@ namespace WebUI
 			p.writeSuccess("text/html");
 			NINSS.API.Config config = new NINSS.API.Config(url.Split('?')[2]);
 			string name = url.Split('?')[3];
-			string value = url.Split('?')[4];
+			string value = url.Split('?')[4].Replace("%20", " ");
 			if(value == "get")
 			{
 				value = config.getValue(name);

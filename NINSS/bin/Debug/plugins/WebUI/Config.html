@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>NINSS Server Configuration</title>
+
+    <link href="bootstrap\css\bootstrap.min.css" rel="stylesheet">
+
+    <link href="dashboard.css" rel="stylesheet">
+
+    <script type="text/javascript">
+      function loadConfigValues(name)
+      {
+        document.cname = name;
+        $.get(document.URL.split('?')[0].replace('/Config.html', '')+'?configvalues?'+name, function (data)
+          {
+            for(var i = 0; i < data.split(',').length; i++)
+            {
+              displayConfigValue(i+1, data.split(',')[i].trim());
+            }
+          });
+      }
+      function displayConfigValue(count, name)
+      {
+        document.getElementById('configTable').innerHTML += "<tr><td>"+count+"</td><td>"+name+"</td><td id=\""+name+"\">Loading...</td><td>"+
+        "<button class=\"btn btn-success\" onclick=\"uploadValue('"+name+"');\">Set</button>&nbsp;<button class=\"btn btn-danger\"onclick=\"setConfigValue('"+name+"');\">Reset</button></td></tr>";
+        setConfigValue(name);
+      }
+      function setConfigValue(id)
+      {
+        $.get(document.URL.split('?')[0].replace('/Config.html', '')+'?config?'+document.cname+'?'+id+'?get', function(data) {
+          document.getElementById(id).innerHTML = "<form role=\"form\"><input class=\"form-control\"type=\"text\" id=\"_"+id+"\" value=\""+data+"\"></input></form>";
+        });
+      }
+      function uploadValue(name)
+      {
+        $.ajax(document.URL.split('?')[0].replace('/Config.html', '')+'?config?'+document.cname+'?'+name+'?'+document.getElementById('_'+name).value);
+      }
+    </script>
+  </head>
+
+  <body onload="loadConfigs( function() {} ); loadConfigValues(document.URL.split('?')[2]);">
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">NINSS Server</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="https://github.com/M4GV5/NINSS">Github</a></li>
+            <li><a href="">Documentation</a></li>
+            <li><a href="https://github.com/M4GV5/NINSS/issues">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="Console.html">Console</a></li>
+            <li><a href="Plugins.html">Plugins</a></li>
+            <li><a href="Configuration.html">Configuration</a></li>
+          </ul>
+          <ul class="nav nav-sidebar" id="configs">
+            <li class="disabled"><a href="">Configuration Files</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h2 class="sub-header">Configuration</h2>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Value</th>
+                  <th>Set</th>
+                </tr>
+              </thead>
+              <tbody id="configTable">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="bootstrap\js\jquery.min.js"></script>
+    <script src="bootstrap\js\bootstrap.min.js"></script>
+    <script src="loader.js"></script>
+  </body>
+</html>

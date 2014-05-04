@@ -5,20 +5,9 @@
 
     <title>NINSS Server Configuration</title>
 
-    <!-- Bootstrap core CSS -->
     <link href="bootstrap\css\bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body onload="loadConfigs( function() {} );">
@@ -49,8 +38,8 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="index.html">Dashboard</a></li>
-            <li><a href="Console.html">Console</a></li>
+            <li><a href="index.html">Dashboard</a></li>
+            <li  class="active"><a href="Console.html">Console</a></li>
             <li><a href="Plugins.html">Plugins</a></li>
             <li><a href="Configuration.html">Configuration</a></li>
           </ul>
@@ -59,15 +48,16 @@
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h2 class="sub-header">Dashboard</h2>
-          <p>This is the configuration Panel for your NINSS Minecraft server.<br />
-            Console is <a href="Console.html">here</a><br />
-            Plugins <a href="Plugins.html">here</a><br />
-            and Configuration can be done <a href="Configuration.html">here</a><br />
-            <br />
-            For help using NINSS visit our github page <a href="https://github.com/M4GV5/NINSS/">here</a><br />
-            You can post Issues <a href="https://github.com/M4GV5/NINSS/issues">here</a>
-          </p>
+          <h2 class="sub-header">Console</h2>
+          <form class="form" role="form">
+          <h3>Execute Command</h3>
+            <div class="form-group">
+              <input type="text" class="form-control" id="command" placeholder="Command">
+              <p class="help-block">Documentation of all commands can be found <a href="http://minecraft.gamepedia.com/Commands">here</a>
+            </div>
+          </form>
+          <button class="btn btn-success" onclick="jQuery.ajax('?command?'+getElementById('command').value); document.getElementById('command').value = ''">Send</button>
+          <button class="btn btn-danger" onclick="document.getElementById('command').value = ''">Clear</button>
         </div>
       </div>
     </div>

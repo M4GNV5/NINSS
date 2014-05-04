@@ -15,7 +15,7 @@
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
-    <OutputPath>..\NINSS\bin\Debug\plugins</OutputPath>
+    <OutputPath>..\..\NINSS\bin\Debug\plugins</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
-    <OutputPath>..\NINSS\bin\Debug\plugins</OutputPath>
+    <OutputPath>..\..\NINSS\bin\Debug\plugins</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Noesis.Javascript">
-      <HintPath>..\NINSS\bin\Debug\plugins\libs\Noesis.Javascript.dll</HintPath>
+      <HintPath>..\..\NINSS\bin\Debug\plugins\libs\Noesis.Javascript.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -44,7 +44,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\NINSS\NINSS.csproj">
+    <ProjectReference Include="..\..\NINSS\NINSS.csproj">
       <Project>{AAB018C4-5E0E-48B7-B7EB-21A03044ABD5}</Project>
       <Name>NINSS</Name>
     </ProjectReference>
