@@ -15,6 +15,7 @@ namespace WebUI
 		{
 			NINSS.MinecraftConnector.OnStop += onStop;
 			NINSS.MinecraftConnector.OnCommand += onCommand;
+			onAction += logAction;
 			onAction += pluginsAction;
 			onAction += commandAction;
 			onAction += configAction;
@@ -76,6 +77,16 @@ namespace WebUI
 			}
 		}
 
+		public static bool logAction(string url, HttpProcessor p)
+		{
+			if(url.Split('?').Length != 2 || url.Split('?')[1] != "log")
+				return false;
+			System.IO.File.Copy("logs\\latest.log", "plugins\\WebUI\\log.log");
+			foreach(string line in System.IO.File.ReadAllLines("plugins\\WebUI\\log.log"))
+				p.outputStream.WriteLine(line);
+			System.IO.File.Delete("plugins\\WebUI\\log.log");
+			return true;
+		}
 		public static bool pluginsAction(string url, HttpProcessor p)
 		{
 			if(url.Split('?').Length != 2 || url.Split('?')[1] != "plugins")

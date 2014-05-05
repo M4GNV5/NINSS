@@ -37,7 +37,8 @@ namespace NINSS
 			{
 				System.Collections.Generic.List<string> values = new System.Collections.Generic.List<string>();
 				foreach(XmlNode node in rootNode.ChildNodes)
-					values.Add(node.Name);
+					if(node.NodeType == XmlNodeType.Element)
+						values.Add(node.Name);
 				return values.ToArray();
 			}
 			/// <summary>
