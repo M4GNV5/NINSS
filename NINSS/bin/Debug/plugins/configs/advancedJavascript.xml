@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <Welcome_Message>Welcome to this Server!</Welcome_Message>
+  <Welcome_Message_color>gold</Welcome_Message_color>
+  <Max_UpperCase_percent>40</Max_UpperCase_percent>
+</root>

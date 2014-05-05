@@ -25,7 +25,7 @@
       {
         document.getElementById('configTable').innerHTML += "<tr><td>"+count+"</td><td>"+name+"</td><td id=\""+name+"\">Loading...</td><td>"+
         "<button class=\"btn btn-success\" onclick=\"uploadValue('"+name+"');\">Set</button>&nbsp;<button class=\"btn btn-danger\"onclick=\"setConfigValue('"+name+"');\">Reset</button></td></tr>";
-        setConfigValue(name);
+        setTimeout(setConfigValue(name), 10);
       }
       function setConfigValue(id)
       {

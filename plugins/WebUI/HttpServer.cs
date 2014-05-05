@@ -117,17 +117,25 @@ namespace WebUI
 		
 		public void listen()
 		{
-			listener = new TcpListener(new IPEndPoint(ip, port));
-			listener.Start();
-			while (is_active)
-			{                
-				TcpClient s = listener.AcceptTcpClient();
-				HttpProcessor processor = new HttpProcessor(s, this);
-				Thread thread = new Thread(new ThreadStart(processor.process));
-				thread.Start();
-				Thread.Sleep(1);
+			try
+			{
+				listener = new TcpListener(new IPEndPoint(ip, port));
+				listener.Start();
+				while (is_active)
+				{                
+					TcpClient s = listener.AcceptTcpClient();
+					HttpProcessor processor = new HttpProcessor(s, this);
+					Thread thread = new Thread(new ThreadStart(processor.process));
+					thread.Start();
+					Thread.Sleep(1);
+				}
 			}
-			listener.Stop();
+			catch (Exception e)
+			{
+				Console.WriteLine("WebUI Webserver error!\nMessage:\n"+e.Message+"\nStacktrace:\n"+e.StackTrace);
+				if(e.InnerException != null)
+					Console.WriteLine("InnerException:\nMessage:\n"+e.InnerException.Message+"\nStacktrace:\n"+e.InnerException.StackTrace);
+			}
 		}
 		
 		public abstract void handleGETRequest(HttpProcessor p);

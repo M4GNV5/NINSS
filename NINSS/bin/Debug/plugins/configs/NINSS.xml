@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <ServerFile>%auto%</ServerFile> <!-- Server.jar file. %auto% only works with one file!-->
+  <JavaExecutable>java.exe</JavaExecutable> <!--Java installation path. use java.exe for default under windows and java under linux/mac-->
+  <JavaArguments>-jar %jar% nogui</JavaArguments> <!-- Java arguments type java in console for help with arguments!-->
+  <EnablePlugins>true</EnablePlugins> <!-- Wheter Plugns are enabled or not. Default: true, NINSS doesnt make much sense without plugins-->
+  <Close_Window_on_Serverstop>false</Close_Window_on_Serverstop> <!-- If true you wont be able to read much Console output after serverstop -->
+</root>

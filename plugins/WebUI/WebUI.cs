@@ -13,6 +13,8 @@ namespace WebUI
 		public static action onAction;
 		public WebUI ()
 		{
+			NINSS.MinecraftConnector.OnStop += onStop;
+			NINSS.MinecraftConnector.OnCommand += onCommand;
 			onAction += pluginsAction;
 			onAction += commandAction;
 			onAction += configAction;
@@ -32,6 +34,19 @@ namespace WebUI
 				if(e.InnerException != null)
 					Console.WriteLine("InnerException: "+e.InnerException.Message+"\nInner Stacktrace:\n"+e.InnerException.StackTrace);
 			}
+		}
+		public void onCommand(string name, string arg)
+		{
+			if(arg == "webui stop")
+				onStop();
+		}
+		public void onStop()
+		{
+			this.is_active = false;
+			this.listener.Stop();
+			Thread.Sleep(100);
+			serverThread.Abort();
+			listener = null;
 		}
 
 		public override void handleGETRequest (HttpProcessor p)

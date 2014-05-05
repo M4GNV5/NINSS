@@ -8,10 +8,11 @@ namespace NINSS
 		internal System.Diagnostics.Process mcProcess;
 		internal MinecraftServerManager (string jarFile)
 		{
-			string executable = new API.Config("..\\..\\NINASS_config").getValue("JavaExecutable");
-			string arguments = new API.Config("..\\..\\NINASS_config").getValue("JavaArguments").Replace("%jar%", "\""+jarFile+"\"");
+			string executable = new API.Config("NINSS").getValue("JavaExecutable");
+			string arguments = new API.Config("NINSS").getValue("JavaArguments").Replace("%jar%", "\""+jarFile+"\"");
 			Console.WriteLine("\nStarting java with arguments: "+arguments+"\n");
 			OnServerMessage += MinecraftConnector.OnServerMessage;
+			MinecraftConnector.OnStop += onStop;
 			mcProcess = new System.Diagnostics.Process();
 			mcProcess.StartInfo = new System.Diagnostics.ProcessStartInfo(executable, arguments);
 			mcProcess.StartInfo.UseShellExecute = false;
@@ -27,6 +28,8 @@ namespace NINSS
 		}
 		internal void readMessage(object sender, System.Diagnostics.DataReceivedEventArgs e)
 		{
+			if(e == null || e.Data == null)
+				return;
 			Console.WriteLine(e.Data.Remove(0, 12).Replace(e.Data.Remove(0, 12).Split(':')[0], "").Trim(':', ' ', '[', ']'));
 			if(OnServerMessage != null && e.Data != null)
 			{
@@ -67,6 +70,21 @@ namespace NINSS
 				else
 					MainClass.serverManager.writeMessage(message);
 			}
+		}
+		public void onStop()
+		{
+			System.Threading.Thread exitThread = new System.Threading.Thread(new System.Threading.ThreadStart(onExit));
+			exitThread.Start();
+		}
+		public void onExit()
+		{
+			MainClass.inputThread.Abort();
+			System.Threading.Thread.Sleep(300);
+			if(new API.Config("NINSS").getValue("Close_Window_on_Serverstop") == "true")
+				Environment.Exit(0);
+			Console.WriteLine("\nServer stopped!\nPress any key to Exit!");
+			Console.ReadKey();
+			Environment.Exit(0);
 		}
 	}
 }

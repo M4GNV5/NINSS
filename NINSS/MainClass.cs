@@ -11,7 +11,7 @@ namespace NINSS
 	/// </summary>
 	public class MainClass
 	{
-		private static System.Threading.Thread inputThread;
+		internal static System.Threading.Thread inputThread;
 		internal static MinecraftServerManager serverManager;
 		public static PluginManager pluginManager;
 		
@@ -19,14 +19,14 @@ namespace NINSS
 		{
 			try
 			{
-				if(!File.Exists(AppDomain.CurrentDomain.BaseDirectory+"NINASS_config.xml"))
+				if(!File.Exists(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\NINSS.xml"))
 				{
-					Console.WriteLine("Missing NINASS_config.xml!\nPlease use and edit the one github!");
+					Console.WriteLine("Missing config NINSS.xml!\nPlease use and edit the one github!");
 					Console.WriteLine("Press any key to exit");
 					Console.ReadKey();
 					Environment.Exit(0);
 				}
-				Config config = new Config("..\\..\\NINASS_config");
+				Config config = new Config("NINSS");
 				if(config.getValue("EnablePlugins") == "true")
 					pluginManager = new PluginManager();
 				try
@@ -66,11 +66,9 @@ namespace NINSS
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("Fatal Error during Server startup!");
-				if(serverManager != null && serverManager.mcProcess != null)
-					serverManager.mcProcess.Close();
-				Console.WriteLine("Error: "+e.Message);
-				Console.WriteLine("Stacktrace: "+e.StackTrace);
+				Console.WriteLine("Fatal Error during startup!\nMessage:\n"+e.Message+"\nStacktrace:\n"+e.StackTrace);
+				if(e.InnerException != null)
+					Console.WriteLine("InnerException:\nMessage:\n"+e.InnerException.Message+"\nStacktrace:\n"+e.InnerException.StackTrace);
 			}
 		}
 		
@@ -89,7 +87,6 @@ namespace NINSS
 		{
 			inputThread.Abort();
 			serverManager.writeMessage("stop");
-			serverManager.mcProcess = null;
 			return true;
 		}
 	}
