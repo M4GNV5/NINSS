@@ -68,7 +68,7 @@ namespace NINSS
 			/// <param name="file">Config name</param>
 			public void saveConfig(string name)
 			{
-				doc.Save(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml");
+				doc.Save(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/configs/"+name+".xml"));
 			}
 			/// <summary>
 			/// Loads a config
@@ -76,13 +76,13 @@ namespace NINSS
 			/// <param name="file">Config name</param>
 			public void loadConfig(string name)
 			{
-				if(!System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml"))
+				if(!System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/configs/"+name+".xml")))
 				{
 					createNewConfig();
 					saveConfig(name);
 				}
 				else
-					doc.Load(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml");
+					doc.Load(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/configs/"+name+".xml"));
 			}
 		}
 	}

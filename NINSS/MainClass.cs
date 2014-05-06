@@ -19,9 +19,9 @@ namespace NINSS
 		{
 			try
 			{
-				if(!File.Exists(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\NINSS.xml"))
+				if(!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/configs/NINSS.xml")))
 				{
-					Console.WriteLine("Missing config NINSS.xml!\nPlease use and edit the one github!");
+					Console.WriteLine("Missing config NINSS.xml!\nPlease use and edit the one from github!");
 					Console.WriteLine("Press any key to exit");
 					Console.ReadKey();
 					Environment.Exit(0);
@@ -85,6 +85,8 @@ namespace NINSS
 		}
 		public static bool onExit(CtrlTypes CtrlType)
 		{
+			if(inputThread == null)
+				return true;
 			inputThread.Abort();
 			serverManager.writeMessage("stop");
 			return true;

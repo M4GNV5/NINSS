@@ -48,7 +48,7 @@ namespace JavascriptConnector
 		/// <param name="name">Plugin name</param>
 		public void loadPlugin(string name)
 		{
-			plugins.Add(name, File.ReadAllText("./plugins/"+name+".js"));
+			plugins.Add(name, File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/"+name+".js")));
 			Console.WriteLine("Loaded Javascript Plugin: "+name+".js");
 		}
 		/// <summary>

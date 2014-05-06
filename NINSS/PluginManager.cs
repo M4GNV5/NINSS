@@ -39,7 +39,7 @@ namespace NINSS
 				if(assembly.FullName == e.Name)
 					return assembly;
 			string name = new System.Reflection.AssemblyName(e.Name).Name;
-			return System.Reflection.Assembly.LoadFile(AppDomain.CurrentDomain.BaseDirectory+"plugins\\libs\\"+name+".dll");
+			return System.Reflection.Assembly.LoadFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/libs/"+name+".dll"));
 		}
 
 		/// <summary>
