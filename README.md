@@ -4,20 +4,18 @@ NINSS stands for "NINSS is no serversoftware". NINSS is a Minecraft Server Wrapp
 It was designed to easily Write and import Plugins Furthermore it is ment be an opportunity for programming
 beginners to improve their skills.
 
-Binaries can be found here: https://github.com/M4GV5/NINSS/tree/master/NINSS/bin/Debug
-
 #Plugin Example code
 ```javascript
-function onJoin(name) //onJoin(name) is invoked when a player with name name joins the server
+function PlayerJoin(name) //onJoin(name) is invoked when a player with name name joins the server
 {
-	Player.sendMessageTo(name, "Welcome to this server!", "gold"); //Send a welcome message to the new Player
+	Player.SendMessageTo(name, "Welcome to this server!", "gold"); //Send a welcome message to the new Player
 }
-function onCommand(name, arg) //onCommand(name, args) is invoked when a player says something beginning with an '!'
+function OnCommand(name, arg) //onCommand(name, args) is invoked when a player says something beginning with an '!'
 {
   if(arg.split(' ')[0] == "leave") //if command is "leave"
-    Server.runCommand("kick "+name+" Own decision"); //kick player
+    Server.WunCommand("kick "+name+" Own decision"); //kick player
 }
-function onStart() //onStart() is invoked when the server starts
+function ServerStart() //onStart() is invoked when the server starts
 {
   Console.WriteLine("Loaded <Pluginname>");
 }
