@@ -9,7 +9,7 @@
 
 */
 
-function ServerStart() //onStart() is invoked when the server starts
+function ServerStart() //ServerStart() is invoked when the server starts
 {
 	RefreshValues(); //see below
 }
@@ -28,7 +28,7 @@ function RefreshValues()
 	Var.Set("advancedJs_caps_percent", /*get config value named 'Welcome_message_color'*/Config.GetValue("Max_UpperCase_percent")); //set value of 'advancedJs_caps_percent' to the value we get from the config
 }
 
-function OnCommand(name, arg) //onCommand(name, args) is invoked when a player says something beginning with an '!'
+function OnCommand(name, arg) //OnCommand(name, args) is invoked when a player says something beginning with an '!'
 {
 	var args = arg.split(' '); //convert arg string to string array
 	if(args[0] == "welcome" && args.length > 1) //if command is 'welcome'
@@ -54,12 +54,12 @@ function OnCommand(name, arg) //onCommand(name, args) is invoked when a player s
 		RefreshValues(); //refresh the variables
 }
 
-function PlayerJoin(name) //onJoin(name) is invoked when a player with name name joins the server
+function PlayerJoin(name) //PlayerJoin(name) is invoked when a player with name name joins the server
 {
 	Player.SendMessageTo(name, Var.Get("advancedJs_welcome"), Var.Get("advancedJs_welcome_color")); //Send the welcome message to the new Player
 }
 
-function ChatReceived(name, message) //onChat(name, message) is invoked when a Player says something
+function ChatReceived(name, message) //ChatReceived(name, message) is invoked when a Player says something
 {
 	var upper = 0; //temporary variable with upper case letter count
 	for(var i = 0; i < message.length; i++) //loop through all letters in message
