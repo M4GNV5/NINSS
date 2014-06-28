@@ -28,7 +28,7 @@ namespace JavascriptConnector
 				Console.WriteLine("Finished Loading Javascript Plugins!");
 			}
 			else
-				Console.WriteLine("\nNo Javascript Plugins found!");
+				Console.WriteLine("No Javascript Plugins found!");
 			javascriptContext = new JavascriptContext();
 			addJsReferences(System.Reflection.Assembly.GetAssembly(typeof(MainClass)), "NINSS.API", ref javascriptContext);
 			addJsReferences(System.Reflection.Assembly.GetAssembly(typeof(JavascriptConnector)), "JavascriptConnector.API", ref javascriptContext);

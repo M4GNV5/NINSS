@@ -15,7 +15,7 @@ namespace NINSS
 		internal static MinecraftServerManager serverManager;
 		public static PluginManager pluginManager;
 		
-		public static void Main (string[] args)
+		public static int Main (string[] args)
 		{
 			try
 			{
@@ -24,21 +24,21 @@ namespace NINSS
 					Console.WriteLine("Missing config NINSS.xml!\nPlease use and edit the one from github!");
 					Console.WriteLine("Press any key to exit");
 					Console.ReadKey();
-					Environment.Exit(0);
+					return 1;
 				}
 				Config config = new Config("NINSS");
-				if(config.getValue("EnablePlugins") == "true")
+				if(config.GetValue("EnablePlugins") == "true")
 					pluginManager = new PluginManager();
 				try
 				{
-					SetConsoleCtrlHandler(new HandlerRoutine(onExit), true);
+					SetConsoleCtrlHandler(new HandlerRoutine(OnExit), true);
 				}
 				catch
 				{
 					Console.WriteLine("It seems that you are on Linux/mac do not close this Program before typing 'stop' or server will be running in background!");
 					Console.WriteLine("Remember to set 'Executable' to 'java' in config");
 				}
-				if(config.getValue("ServerFile") == "%auto%")
+				if(config.GetValue("ServerFile") == "%auto%")
 				{
 					if (Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.jar").Length == 0)
 					{
@@ -54,14 +54,18 @@ namespace NINSS
 						                         " of them or select on in the config\n");
 						System.Console.WriteLine("Press any key to exit");
 						System.Console.ReadKey();
-						System.Environment.Exit(0);
+						return 1;
 					}
 					else
+					{
 						serverManager = new MinecraftServerManager(Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.jar")[0]);
+					}
 				}
 				else
-					serverManager = new MinecraftServerManager(config.getValue("ServerFile"));
-				inputThread = new System.Threading.Thread(new System.Threading.ThreadStart(MinecraftServerManager.readInputs));
+				{
+					serverManager = new MinecraftServerManager(config.GetValue("ServerFile"));
+				}
+				inputThread = new System.Threading.Thread(new System.Threading.ThreadStart(MinecraftServerManager.ReadInputs));
 				inputThread.Start();
 			}
 			catch (Exception e)
@@ -70,6 +74,7 @@ namespace NINSS
 				if(e.InnerException != null)
 					Console.WriteLine("InnerException:\nMessage:\n"+e.InnerException.Message+"\nStacktrace:\n"+e.InnerException.StackTrace);
 			}
+			return 0;
 		}
 		
 		[DllImport("Kernel32")]
@@ -83,12 +88,12 @@ namespace NINSS
 			CTRL_LOGOFF_EVENT = 5,
 			CTRL_SHUTDOWN_EVENT
 		}
-		public static bool onExit(CtrlTypes CtrlType)
+		public static bool OnExit(CtrlTypes CtrlType)
 		{
 			if(inputThread == null)
 				return true;
 			inputThread.Abort();
-			serverManager.writeMessage("stop");
+			serverManager.WriteMessage("stop");
 			return true;
 		}
 	}

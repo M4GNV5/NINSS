@@ -5,10 +5,10 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("NINSS")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Wrapper for Minecraft Servers")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
+[assembly: AssemblyProduct("NINSS")]
 [assembly: AssemblyCopyright("M4GNV5")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

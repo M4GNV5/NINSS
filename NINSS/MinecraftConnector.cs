@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+
 namespace NINSS
 {
 	/// <summary>
@@ -10,19 +12,19 @@ namespace NINSS
 		/// <summary>
 		/// Occurs when a player joins
 		/// </summary>
-		public static event PlayerEvent OnPlayerJoin;
+		public static event PlayerEvent PlayerJoin;
 		/// <summary>
 		/// Occurs when a player leaves
 		/// </summary>
-		public static event PlayerEvent OnPlayerLeave;
+		public static event PlayerEvent PlayerLeave;
 		/// <summary>
 		/// Occurs when a player is teleported to coordinates
 		/// </summary>
-		public static event PlayerEvent OnPlayerPosition;
+		public static event PlayerEvent PlayerPosition;
 		/// <summary>
 		/// Occurs when a player says something in chat
 		/// </summary>
-		public static event PlayerEvent OnChat;
+		public static event PlayerEvent ChatReceived;
 		/// <summary>
 		/// Occurs when a player writes a command in chat
 		/// </summary>
@@ -32,11 +34,11 @@ namespace NINSS
 		/// <summary>
 		/// Occurs when the server starts
 		/// </summary>
-		public static event ServerEvent OnStart;
+		public static event ServerEvent ServerStart;
 		/// <summary>
 		/// Occurs when on stops
 		/// </summary>
-		public static event	ServerEvent OnStop;
+		public static event	ServerEvent ServerStop;
 
 		public delegate void messageRead(string message);
 		/// <summary>
@@ -44,59 +46,64 @@ namespace NINSS
 		/// </summary>
 		public static System.Collections.Generic.Dictionary<string, messageRead> messageReader = new System.Collections.Generic.Dictionary<string, messageRead>
 		{
-			{"joined the game", readJoin},
-			{"left the game", readLeft},
-			{"<", readChat},
-			{"Done", readStart},
-			{"Stopping the server", readStop},
-			{"Teleported", readPosition}
+			{"joined the game", ReadJoin},
+			{"left the game", ReadLeft},
+			{"<", ReadChat},
+			{"Done", ReadStart},
+			{"Stopping the server", ReadStop},
+			{"Teleported", ReadPosition}
 		};
 		public static void OnServerMessage(string message)
 		{
-			message = message.Remove(0, 12);
-			message = message.Replace(message.Split(':')[0], "");
-			message = message.Trim(':', ' ', '[', ']');
-			foreach(string readerKey in messageReader.Keys)
-				if(message.Contains(readerKey))
-					messageReader[readerKey](message);
+			StringBuilder sb = new StringBuilder (message);
+			sb.Remove(0, 12);
+            sb.Replace(sb.ToString().Split(':')[0], "");
+			message = sb.ToString().Trim(':', ' ', '[', ']');
+			foreach (string readerKey in messageReader.Keys)
+			{
+				if (message.Contains(readerKey))
+				{
+					messageReader [readerKey](message);
+				}
+			}
 		}
 		
-		public static void readPosition(string message)
+		public static void ReadPosition(string message)
 		{
-			API.Player.onlinePlayer[message.Split(' ')[1]].position = message.Split(' ')[3].Replace(",", " ");
-			if(OnPlayerPosition != null)
-				OnPlayerPosition(message.Split(' ')[1], message.Split(' ')[3].Replace(",", " "));
+			API.Player.onlinePlayer[message.Split(' ')[1]].Position = message.Split(' ')[3].Replace(",", " ");
+			if(PlayerPosition != null)
+				PlayerPosition(message.Split(' ')[1], message.Split(' ')[3].Replace(",", " "));
 		}
-		public static void readJoin(string message)
+		public static void ReadJoin(string message)
 		{
 			API.Player.onlinePlayer.Add(message.Split(' ')[0], new API.Player(message.Split(' ')[0]));
-			if(OnPlayerJoin != null)
-				OnPlayerJoin(message.Split(' ')[0], null);
+			if(PlayerJoin != null)
+				PlayerJoin(message.Split(' ')[0], null);
 		}
-		public static void readLeft(string message)
+		public static void ReadLeft(string message)
 		{
 			API.Player.onlinePlayer.Remove(message.Split(' ')[0]);
-			if(OnPlayerJoin != null)
-				OnPlayerLeave(message.Split(' ')[0], null);
+			if(PlayerJoin != null)
+				PlayerLeave(message.Split(' ')[0], null);
 		}
-		public static void readChat(string message)
+		public static void ReadChat(string message)
 		{
 			string player = message.Split('<', '>')[1].Trim();
 			string chat = message.Replace("<"+message.Split('<', '>')[1]+">", "").Trim();
-			if(OnChat != null)
-				OnChat(player, chat);
+			if(ChatReceived != null)
+				ChatReceived(player, chat);
 			if(chat.Substring(0, 1) == "!")
 				OnCommand(player, chat.TrimStart('!'));
 		}
-		public static void readStart(string message)
+		public static void ReadStart(string message)
 		{
-			if(OnStart != null)
-				OnStart();
+			if(ServerStart != null)
+				ServerStart();
 		}
-		public static void readStop(string message)
+		public static void ReadStop(string message)
 		{
-			if(OnStop != null)
-				OnStop();
+			if(ServerStop != null)
+				ServerStop();
 		}
 	}
 }

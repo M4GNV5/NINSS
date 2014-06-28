@@ -1,29 +1,40 @@
 using System;
 using System.Xml;
+using System.Linq;
+using NINSS;
+
 namespace SimplePermissions
 {
-	public class SimplePermissions
+	public class SimplePermissions : INinssPlugin
 	{
+		public string Name { get { return "SimplePermissions"; } }
+
 		XmlNode groupNode;
 		XmlNode defaultGroup;
 		public SimplePermissions ()
 		{
-			loadPermissions("Permissions");
-			NINSS.MinecraftConnector.OnStart += onStart;
+			LoadPermissions("Permissions");
+			NINSS.MinecraftConnector.ServerStart += OnStart;
 		}
-		public void onStart()
+		public void OnStart()
 		{
-			if(NINSS.MainClass.pluginManager.plugins.ContainsKey("JavascriptConnector"))
+			if (NINSS.MainClass.pluginManager.Plugins.First(p => p.Name == "JavascriptConnector") != null)
 			{
-				object jsManager = NINSS.MainClass.pluginManager.plugins["JavascriptConnector"].GetType().GetField("manager").GetValue(NINSS.MainClass.pluginManager.plugins["JavascriptConnector"]);
+				object jsPlugin = NINSS.MainClass.pluginManager.Plugins.First(p => p.Name == "JavascriptConnector");
+				object jsManager = jsPlugin.GetType().GetField("manager").GetValue(jsPlugin);
 				object jsContext = jsManager.GetType().GetField("javascriptContext").GetValue(jsManager);
-				jsContext.GetType().GetMethod("SetParameter", new System.Type[] {typeof(string), typeof(object)}).Invoke(jsContext, new Object[] {"Permission", this});
+				jsContext.GetType().GetMethod("SetParameter", new System.Type[] { typeof(string), typeof(object) }).Invoke(jsContext, new Object[] {
+					"Permission",
+					this
+				});
 				Console.WriteLine("Inserted 'Permission' lib into JavascriptConnector");
 			}
 			else
+			{
 				Console.WriteLine("JavascriptConnector could not be found! Cannot insert UUID lib and event!");
+			}
 		}
-		public void loadPermissions(string name)
+		public void LoadPermissions(string name)
 		{
 			XmlDocument doc = new XmlDocument();
 			if(!System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory+"plugins\\configs\\"+name+".xml"))
@@ -36,14 +47,14 @@ namespace SimplePermissions
 				if(node.Attributes != null && node.Attributes.GetNamedItem("default") != null && node.Attributes.GetNamedItem("default").Value == "true")
 					defaultGroup = node;
 		}
-		public bool hasPermission(string player, string permission)
+		public bool HasPermission(string player, string permission)
 		{
-			foreach(XmlNode node in getGroupNode(player).ChildNodes)
-				if(node.Name == "permission" && isPermittableFrom(permission, node.InnerText))
+			foreach(XmlNode node in GetGroupNode(player).ChildNodes)
+				if(node.Name == "permission" && IsPermittableFrom(permission, node.InnerText))
 					return true;
 			return false;
 		}
-		public string getGroup(string player)
+		public string GetGroup(string player)
 		{
 			foreach(XmlNode gNode in groupNode.ChildNodes)
 				foreach(XmlNode node in gNode.ChildNodes)
@@ -51,7 +62,7 @@ namespace SimplePermissions
 						return gNode.Attributes.GetNamedItem("name").Value;
 			return defaultGroup.Attributes.GetNamedItem("name").Value;
 		}
-		public XmlNode getGroupNode(string player)
+		public XmlNode GetGroupNode(string player)
 		{
 			foreach(XmlNode gNode in groupNode.ChildNodes)
 				foreach(XmlNode node in gNode.ChildNodes)
@@ -59,7 +70,7 @@ namespace SimplePermissions
 						return gNode;
 			return defaultGroup;
 		}
-		public bool isPermittableFrom(string searchedPerm, string givenPerm)
+		public bool IsPermittableFrom(string searchedPerm, string givenPerm)
 		{
 			string[] _searchedPerm = searchedPerm.Split('.');
 			string[] _givenPerm = givenPerm.Split('.');

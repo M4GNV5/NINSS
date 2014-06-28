@@ -1,9 +1,13 @@
 using System;
 using NINSS;
+using System.Linq;
+
 namespace UuidConnector
 {
-	public class UuidConnector
+	public class UuidConnector : INinssPlugin
 	{
+		public string Name { get { return "UuidConnector"; } }
+
 		public static event MinecraftConnector.PlayerEvent onUuid;
 		private static System.Collections.Generic.Dictionary<string, string> knownPlayer; //UUID, last name
 		private object jsManager;
@@ -12,7 +16,7 @@ namespace UuidConnector
 			get
 			{
 				if(knownPlayer == null)
-					loadUuids();
+					LoadUuids();
 				return knownPlayer;
 			}
 			internal set
@@ -22,32 +26,37 @@ namespace UuidConnector
 		}
 		public UuidConnector()
 		{
-			MinecraftConnector.messageReader.Add("UUID of player", readUuid);
-			MinecraftConnector.OnStop += saveUuids;
-			MinecraftConnector.OnStart += onStart;
+			MinecraftConnector.messageReader.Add("UUID of player", ReadUuid);
+			MinecraftConnector.ServerStop += SaveUuids;
+			MinecraftConnector.ServerStart += OnStart;
 			if(knownPlayer == null)
-				loadUuids();
+				LoadUuids();
 		}
-		public void onStart()
+		public void OnStart()
 		{
-			if(MainClass.pluginManager.plugins.ContainsKey("JavascriptConnector"))
+			if (NINSS.MainClass.pluginManager.Plugins.First(p => p.Name == "JavascriptConnector") != null)
 			{
-				jsManager = MainClass.pluginManager.plugins["JavascriptConnector"].GetType().GetField("manager").GetValue(MainClass.pluginManager.plugins["JavascriptConnector"]);
+				object jsPlugin = NINSS.MainClass.pluginManager.Plugins.First(p => p.Name == "JavascriptConnector");
+				jsManager = jsPlugin.GetType().GetField("manager").GetValue(jsPlugin);
 				object jsContext = jsManager.GetType().GetField("javascriptContext").GetValue(jsManager);
-				jsContext.GetType().GetMethod("SetParameter", new System.Type[] {typeof(string), typeof(object)}).Invoke(jsContext, new Object[] {"Uuid", this});
-				onUuid += jsUuidJoin;
-				Console.WriteLine("Inserted 'Uuid' lib and 'onUuid' event into JavascriptConnector");
+				jsContext.GetType().GetMethod("SetParameter", new System.Type[] { typeof(string), typeof(object) }).Invoke(jsContext, new Object[] {
+                    "Uuid",
+					this
+				});
+                Console.WriteLine("Inserted 'Uuid' lib into JavascriptConnector");
 			}
 			else
+			{
 				Console.WriteLine("JavascriptConnector could not be found! Cannot insert UUID lib and event!");
+			}
 		}
-		public void jsUuidJoin(string uuid, string name)
+		public void JsUuidJoin(string uuid, string name)
 		{
 			if(jsManager != null)
-				jsManager.GetType().GetMethod("executeAll", new System.Type[] {typeof(string)}).Invoke(jsManager, new object[] {"onUuid(\""+uuid+"\", \""+name+"\");"});
+				jsManager.GetType().GetMethod("executeAll", new System.Type[] {typeof(string)}).Invoke(jsManager, new object[] {"OnUuid(\""+uuid+"\", \""+name+"\");"});
 		}
 
-		public static void readUuid(string message) //UUID of player <name> is <uuid>
+		public static void ReadUuid(string message) //UUID of player <name> is <uuid>
 		{
 			if(!knownPlayer.ContainsKey(message.Split(' ')[5]))
 				knownPlayer.Add(message.Split(' ')[5], message.Split(' ')[3]);
@@ -55,31 +64,40 @@ namespace UuidConnector
 				knownPlayer[message.Split(' ')[5]] = message.Split(' ')[3];
 			else
 				return;
-			saveUuids();
+
+			SaveUuids();
 			if(onUuid != null)
 				onUuid(message.Split(' ')[5], message.Split(' ')[3]);
 		}
 
-		public static void loadUuids()
+		public static void LoadUuids()
 		{
 			knownPlayer = new System.Collections.Generic.Dictionary<string, string>();
 			NINSS.API.Config config = new NINSS.API.Config("UUIDs");
-			foreach(System.Xml.XmlNode node in config.rootNode.ChildNodes)
+			foreach (System.Xml.XmlNode node in config.rootNode.ChildNodes)
+			{
 				knownPlayer.Add(node.Name, node.InnerText);
+			}
 		}
-		public static void saveUuids()
+		public static void SaveUuids()
 		{
 			NINSS.API.Config config = new NINSS.API.Config("UUIDs");
-			foreach(string key in knownPlayer.Keys)
-				config.setValue(key, knownPlayer[key]);
-			config.saveConfig("UUIDs");
+			foreach (string key in knownPlayer.Keys)
+			{
+				config.SetValue(key, knownPlayer [key]);
+			}
+			config.SaveConfig("UUIDs");
 		}
 		
-		public static string getUuidOf(string name)
+		public static string GetUuidOf(string name)
 		{
-			foreach(string uuid in knownPlayer.Keys)
-				if(knownPlayer[uuid] == name)
+			foreach (string uuid in knownPlayer.Keys)
+			{
+				if (knownPlayer [uuid] == name)
+				{
 					return uuid;
+				}
+			}
 			return null;
 		}
 	}

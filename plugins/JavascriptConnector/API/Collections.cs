@@ -24,7 +24,7 @@ namespace JavascriptConnector
 			/// Get the length of the array
 			/// </summary>
 			/// <value>The length of the array</value>
-			public int length
+            public int Length
 			{
 				get
 				{
@@ -47,7 +47,7 @@ namespace JavascriptConnector
 			/// </summary>
 			/// <returns>The new Array</returns>
 			/// <param name="length">Length of the Array</param>
-			public Array getNew(int length)
+            public Array GetNew(int length)
 			{
 				return new Array(length);
 			}
@@ -55,7 +55,7 @@ namespace JavascriptConnector
 			/// Get the value at the specific index
 			/// </summary>
 			/// <param name="index">Index</param>
-			public object get(int index)
+            public object Get(int index)
 			{
 				return array[index];
 			}
@@ -110,7 +110,7 @@ namespace JavascriptConnector
 			/// Initializes a new instance of the <see cref="JavascriptConnector.API.List"/> class.
 			/// </summary>
 			/// <returns>The new List</returns>
-			public List getNew()
+            public List GetNew()
 			{
 				return new List();
 			}
@@ -118,7 +118,7 @@ namespace JavascriptConnector
 			/// Get the value at the specific index
 			/// </summary>
 			/// <param name="index">Index</param>
-			public object get(int index)
+            public object Get(int index)
 			{
 				return list[index];
 			}
@@ -127,7 +127,7 @@ namespace JavascriptConnector
 			/// </summary>
 			/// <param name="index">Index</param>
 			/// <param name="value">Value</param>
-			public void set(int index, object value)
+            public void Set(int index, object value)
 			{
 				list[index] = value;
 			}
@@ -203,7 +203,7 @@ namespace JavascriptConnector
 			/// <summary>
 			/// Initializes a new instance of the <see cref="JavascriptConnector.API.Dictionary"/> class.
 			/// </summary>
-			public Dictionary getNew()
+            public Dictionary GetNew()
 			{
 				return new Dictionary();
 			}
@@ -211,7 +211,7 @@ namespace JavascriptConnector
 			/// Get the value with specific key
 			/// </summary>
 			/// <param name="key">Key</param>
-			public object get(object key)
+            public object Get(object key)
 			{
 				return dictionary[key];
 			}
@@ -220,7 +220,7 @@ namespace JavascriptConnector
 			/// </summary>
 			/// <param name="key">Key</param>
 			/// <param name="value">Value</param>
-			public void set(object key, object value)
+            public void Set(object key, object value)
 			{
 				dictionary[key] = value;
 			}

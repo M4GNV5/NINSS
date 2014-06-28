@@ -75,7 +75,7 @@ namespace JavascriptConnector
 			/// gets the variable with specific key
 			/// </summary>
 			/// <param name="key">Key.</param>
-			public object get(string key)
+            public object Get(string key)
 			{
 				if(vars.ContainsKey(key))
 					return vars[key];
@@ -87,7 +87,7 @@ namespace JavascriptConnector
 			/// </summary>
 			/// <param name="key">Key</param>
 			/// <param name="value">Value</param>
-			public void set(string key, object value)
+            public void Set(string key, object value)
 			{
 				if(!vars.ContainsKey(key))
 					vars.Add(key, value);

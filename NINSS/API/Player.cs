@@ -15,47 +15,47 @@ namespace NINSS
 			/// <summary>
 			/// Name of the current player
 			/// </summary>
-			public string name {get; internal set;}
+			public string Name {get; internal set;}
 			/// <summary>
 			/// Last known position of the current player
 			/// </summary>
-			public string position {get; internal set;}
+			public string Position {get; internal set;}
 			public Player ()
 			{}
 			public Player(string _name)
 			{
-				name = _name;
+				Name = _name;
 			}
 			public Player (string _name, string _position)
 			{
-				name = _name;
-				position = _position;
+				Name = _name;
+				Position = _position;
 			}
 			/// <summary>
 			/// Sends a json message to the current player
 			/// </summary>
 			/// <param name="jsonMessage">Json message</param>
-			public void sendMessage(string jsonMessage)
+			public void SendMessage(string jsonMessage)
 			{
-				sendMessageTo(name, jsonMessage);
+				SendMessageTo(Name, jsonMessage);
 			}
 			/// <summary>
 			/// Sends a message with the specific color to the current player
 			/// </summary>
 			/// <param name="message">Message</param>
 			/// <param name="color">Color</param>
-			public void sendMessage(string message, string color)
+			public void SendMessage(string message, string color)
 			{
-				sendMessageTo(name, message, color);
+				SendMessageTo(Name, message, color);
 			}
 			/// <summary>
 			/// Sends a json message to the named player
 			/// </summary>
 			/// <param name="_name">_name of the player</param>
 			/// <param name="jsonMessage">Json message</param>
-			public static void sendMessageTo(string _name, string jsonMessage)
+			public static void SendMessageTo(string name, string jsonMessage)
 			{
-				Server.runCommand("tellraw "+_name+" "+jsonMessage);
+				Server.RunCommand("tellraw "+name+" "+jsonMessage);
 			}
 			/// <summary>
 			/// Sends a message with the specific color to the named player
@@ -63,23 +63,23 @@ namespace NINSS
 			/// <param name="_name">name of the player</param>
 			/// <param name="message">Messag.</param>
 			/// <param name="color">Color</param>
-			public static void sendMessageTo(string _name, string message, string color)
+			public static void SendMessageTo(string name, string message, string color)
 			{
-				Server.runCommand("tellraw "+_name+" {\"text\":\""+message+"\",\"color\":\""+color+"\"}");
+				Server.RunCommand("tellraw "+name+" {\"text\":\""+message+"\",\"color\":\""+color+"\"}");
 			}
 			/// <summary>
 			/// Calls onPosition with the new Player position
 			/// </summary>
-			public void refreshPosition()
+			public void RefreshPosition()
 			{
-				Server.runCommand("tp "+name+" ~ ~ ~");
+				Server.RunCommand("tp "+Name+" ~ ~ ~");
 			}
 			/// <summary>
 			/// Calls onPosition with the new Player position
 			/// </summary>
-			public static void refreshPosition(string _name)
+			public static void RefreshPosition(string _name)
 			{
-				Server.runCommand("tp "+_name+" ~ ~ ~");
+				Server.RunCommand("tp "+_name+" ~ ~ ~");
 			}
 		}
 	}

@@ -59,7 +59,7 @@ namespace WebUI
 				parseRequest();
 				//readHeaders();
 				if (http_method.Equals("GET"))
-					srv.handleGETRequest(this);
+					srv.HandleGETRequest(this);
 			}
 			catch (Exception e)
 			{
@@ -138,6 +138,6 @@ namespace WebUI
 			}
 		}
 		
-		public abstract void handleGETRequest(HttpProcessor p);
+		public abstract void HandleGETRequest(HttpProcessor p);
 	}
 }

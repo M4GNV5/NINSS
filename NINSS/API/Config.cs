@@ -18,7 +18,7 @@ namespace NINSS
 			public Config (string name)
 			{
 				doc = new XmlDocument();
-				loadConfig(name);
+				LoadConfig(name);
 				rootNode = doc.GetElementsByTagName("root")[0];
 			}
 			/// <summary>
@@ -26,14 +26,14 @@ namespace NINSS
 			/// </summary>
 			/// <returns>The value or null if config does not contain the named node</returns>
 			/// <param name="name">Name of node</param>
-			public string getValue(string name)
+			public string GetValue(string name)
 			{
 				if(doc.GetElementsByTagName(name)[0] != null)
 					return doc.GetElementsByTagName(name)[0].InnerText;
 				else
 					return null;
 			}
-			public string[] getValues()
+			public string[] GetValues()
 			{
 				System.Collections.Generic.List<string> values = new System.Collections.Generic.List<string>();
 				foreach(XmlNode node in rootNode.ChildNodes)
@@ -46,7 +46,7 @@ namespace NINSS
 			/// </summary>
 			/// <param name="name">Name.</param>
 			/// <param name="value">Value.</param>
-			public void setValue(string name, string value)
+			public void SetValue(string name, string value)
 			{
 				if(doc.GetElementsByTagName(name)[0] == null)
 					rootNode.AppendChild(doc.CreateElement(name));
@@ -55,7 +55,7 @@ namespace NINSS
 			/// <summary>
 			/// Creates a clean new config
 			/// </summary>
-			public void createNewConfig()
+			public void CreateNewConfig()
 			{
 				doc = new XmlDocument();
 				doc.AppendChild(doc.CreateXmlDeclaration("1.0", "UTF-8", null));
@@ -66,7 +66,7 @@ namespace NINSS
 			/// Saves the config
 			/// </summary>
 			/// <param name="file">Config name</param>
-			public void saveConfig(string name)
+			public void SaveConfig(string name)
 			{
 				doc.Save(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/configs/"+name+".xml"));
 			}
@@ -74,12 +74,12 @@ namespace NINSS
 			/// Loads a config
 			/// </summary>
 			/// <param name="file">Config name</param>
-			public void loadConfig(string name)
+			public void LoadConfig(string name)
 			{
 				if(!System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/configs/"+name+".xml")))
 				{
-					createNewConfig();
-					saveConfig(name);
+					CreateNewConfig();
+					SaveConfig(name);
 				}
 				else
 					doc.Load(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/configs/"+name+".xml"));

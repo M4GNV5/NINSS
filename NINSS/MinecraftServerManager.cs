@@ -1,32 +1,33 @@
 using System;
 namespace NINSS
 {
-	internal class MinecraftServerManager
+	public class MinecraftServerManager
 	{
-		internal delegate void serverMessage(string message);
-		internal event serverMessage OnServerMessage;
-		internal System.Diagnostics.Process mcProcess;
-		internal MinecraftServerManager (string jarFile)
+		public delegate void ServerMessage(string message);
+		public event ServerMessage OnServerMessage;
+		public System.Diagnostics.Process McProcess {get; private set;}
+
+		public MinecraftServerManager (string jarFile)
 		{
-			string executable = new API.Config("NINSS").getValue("JavaExecutable");
-			string arguments = new API.Config("NINSS").getValue("JavaArguments").Replace("%jar%", "\""+jarFile+"\"");
+			string executable = new API.Config("NINSS").GetValue("JavaExecutable");
+			string arguments = new API.Config("NINSS").GetValue("JavaArguments").Replace("%jar%", "\""+jarFile+"\"");
 			Console.WriteLine("\nStarting java with arguments: "+arguments+"\n");
 			OnServerMessage += MinecraftConnector.OnServerMessage;
-			MinecraftConnector.OnStop += onStop;
-			mcProcess = new System.Diagnostics.Process();
-			mcProcess.StartInfo = new System.Diagnostics.ProcessStartInfo(executable, arguments);
-			mcProcess.StartInfo.UseShellExecute = false;
-			mcProcess.StartInfo.RedirectStandardOutput = true;
-			mcProcess.StartInfo.RedirectStandardInput = true;
-			mcProcess.StartInfo.RedirectStandardError = true;
-			mcProcess.StartInfo.CreateNoWindow = true;
-			mcProcess.OutputDataReceived += readMessage;
-			mcProcess.ErrorDataReceived += readMessage;
-			mcProcess.Start();
-			mcProcess.BeginOutputReadLine();
-			mcProcess.BeginErrorReadLine();
+			MinecraftConnector.ServerStop += OnStop;
+			McProcess = new System.Diagnostics.Process();
+			McProcess.StartInfo = new System.Diagnostics.ProcessStartInfo(executable, arguments);
+			McProcess.StartInfo.UseShellExecute = false;
+			McProcess.StartInfo.RedirectStandardOutput = true;
+			McProcess.StartInfo.RedirectStandardInput = true;
+			McProcess.StartInfo.RedirectStandardError = true;
+			McProcess.StartInfo.CreateNoWindow = true;
+			McProcess.OutputDataReceived += ReadMessage;
+			McProcess.ErrorDataReceived += ReadMessage;
+			McProcess.Start();
+			McProcess.BeginOutputReadLine();
+			McProcess.BeginErrorReadLine();
 		}
-		internal void readMessage(object sender, System.Diagnostics.DataReceivedEventArgs e)
+		public void ReadMessage(object sender, System.Diagnostics.DataReceivedEventArgs e)
 		{
 			if(e == null || e.Data == null)
 				return;
@@ -45,13 +46,13 @@ namespace NINSS
 				}
 			}
 		}
-		internal void writeMessage(string message)
+		public void WriteMessage(string message)
 		{
-			mcProcess.StandardInput.WriteLine(message);
+			McProcess.StandardInput.WriteLine(message);
 		}
-		internal static void readInputs()
+		public static void ReadInputs()
 		{
-			while(MainClass.serverManager.mcProcess != null)
+			while(MainClass.serverManager.McProcess != null)
 			{
 				string message = System.Console.ReadLine();
 				if(message.Length > 0 && message[0] == '!' && MainClass.serverManager.OnServerMessage != null)
@@ -68,19 +69,19 @@ namespace NINSS
 					}
 				}
 				else
-					MainClass.serverManager.writeMessage(message);
+					MainClass.serverManager.WriteMessage(message);
 			}
 		}
-		public void onStop()
+		public void OnStop()
 		{
-			System.Threading.Thread exitThread = new System.Threading.Thread(new System.Threading.ThreadStart(onExit));
+			System.Threading.Thread exitThread = new System.Threading.Thread(new System.Threading.ThreadStart(OnExit));
 			exitThread.Start();
 		}
-		public void onExit()
+		public void OnExit()
 		{
 			MainClass.inputThread.Abort();
 			System.Threading.Thread.Sleep(300);
-			if(new API.Config("NINSS").getValue("Close_Window_on_Serverstop") == "true")
+			if(new API.Config("NINSS").GetValue("Close_Window_on_Serverstop") == "true")
 				Environment.Exit(0);
 			Console.WriteLine("\nServer stopped!\nPress any key to Exit!");
 			Console.ReadKey();

@@ -5,37 +5,39 @@ namespace JavascriptConnector
 	/// <summary>
 	/// Javascript connector class that calls the events in all javascript plugins
 	/// </summary>
-	public class JavascriptConnector
+	public class JavascriptConnector : INinssPlugin
 	{
+		public string Name { get { return "JavascriptConnector"; } }
+
 		public JavascriptPluginManager manager;
 		public JavascriptConnector()
 		{
 			manager = new JavascriptPluginManager();
-			MinecraftConnector.OnPlayerJoin += onJoin;
-			MinecraftConnector.OnPlayerLeave += onLeave;
-			MinecraftConnector.OnPlayerPosition += onPosition;
-			MinecraftConnector.OnChat += onChat;
+			MinecraftConnector.PlayerJoin += onJoin;
+			MinecraftConnector.PlayerLeave += onLeave;
+			MinecraftConnector.PlayerPosition += onPosition;
+			MinecraftConnector.ChatReceived += onChat;
 			MinecraftConnector.OnCommand += onCommand;
 			
-			MinecraftConnector.OnStart += onStart;
-			MinecraftConnector.OnStop += onStop;
+			MinecraftConnector.ServerStart += onStart;
+			MinecraftConnector.ServerStop += onStop;
 		}
 		
 		public void onJoin(string name, string misc)
 		{
-			manager.executeAll("onJoin(\""+name+"\");");
+            manager.executeAll("PlayerJoin(\""+name+"\");");
 		}
 		public void onLeave(string name, string misc)
 		{
-			manager.executeAll("onLeave(\""+name+"\");");
+            manager.executeAll("PlayerLeave(\""+name+"\");");
 		}
 		public void onPosition(string name, string position)
 		{
-			manager.executeAll("onPosition(\""+name+"\", \""+position+"\");");
+            manager.executeAll("PlayerPosition(\""+name+"\", \""+position+"\");");
 		}
 		public void onChat(string name, string message)
 		{
-			manager.executeAll("onChat(\""+name+"\", \""+message+"\");");
+            manager.executeAll("ChatReceived(\""+name+"\", \""+message+"\");");
 		}
 		public void onCommand(string name, string args)
 		{
@@ -45,16 +47,16 @@ namespace JavascriptConnector
 				manager.unloadPlugin(args.Split(' ')[1]);
 			else if(args.Split(' ')[0] == "load" && args.Split(' ').Length > 1)
 				manager.loadPlugin("./plugins/"+args.Split(' ')[1]);
-			manager.executeAll("onCommand(\""+name+"\", \""+args+"\");");
+            manager.executeAll("OnCommand(\""+name+"\", \""+args+"\");");
 		}
 		
 		public void onStart()
 		{
-			manager.executeAll("onStart();");
+            manager.executeAll("ServerStart();");
 		}
 		public void onStop()
 		{
-			manager.executeAll("onStop();");
+            manager.executeAll("ServerStop();");
 		}
 	}
 }

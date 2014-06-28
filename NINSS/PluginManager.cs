@@ -1,5 +1,9 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Collections.Generic;
+
 namespace NINSS
 {
 	/// <summary>
@@ -10,78 +14,81 @@ namespace NINSS
 		/// <summary>
 		/// List of all loaded Plugins
 		/// </summary>
-		public System.Collections.Generic.Dictionary<string, object> plugins {get; internal set;}
+		public List<INinssPlugin> Plugins { get; internal set; }
 		public PluginManager ()
 		{
-			AppDomain.CurrentDomain.AssemblyResolve += onAssemblyResolve;
-			if(!Directory.Exists("./plugins"))
-				Directory.CreateDirectory("./plugins");
-			if(Directory.GetFiles("./plugins", "*.dll").Length > 0)
+			AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+			if(!Directory.Exists(PluginPath))
+				Directory.CreateDirectory(PluginPath);
+
+			if(Directory.GetFiles(PluginPath, "*.dll").Length > 0)
 			{
-				plugins = new System.Collections.Generic.Dictionary<string, object>();
+				Plugins = new List<INinssPlugin>();
 				Console.WriteLine("Loading Plugins!");
-				foreach(string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory+"plugins", "*.dll"))
-					loadPlugin(file.Split('\\', '/')[file.Split('\\', '/').Length-1].Replace(".dll", ""));
+				foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory+"plugins", "*.dll"))
+				{
+					Console.WriteLine("Loading Plugin: {0}", file);
+					LoadPlugin(file);
+				}
 				Console.WriteLine("\nFinished Loading Plugins!");
 			}
 			else
 				Console.WriteLine("No Plugins found!");
-		}
-		/// <summary>
-		/// Loads missing assemblies
-		/// </summary>
-		/// <returns>The Assembly</returns>
-		/// <param name="sender">Sender</param>
-		/// <param name="e">Resolve Event Arguments</param>
-		public System.Reflection.Assembly onAssemblyResolve(object sender, ResolveEventArgs e)
-		{
-			foreach(System.Reflection.Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-				if(assembly.FullName == e.Name)
-					return assembly;
-			string name = new System.Reflection.AssemblyName(e.Name).Name;
-			return System.Reflection.Assembly.LoadFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/libs/"+name+".dll"));
+			Console.WriteLine("Plugins: {0}", Plugins.Count);
 		}
 
 		/// <summary>
 		/// Unloads a plugin
 		/// </summary>
 		/// <param name="name">Plugin name</param>
-		public void unloadPlugin(string name)
+		public void UnloadPlugin(string name)
 		{
-			plugins.Remove(name);
+			Plugins.Remove(Plugins.First(p => p.Name == name));
 		}
 		/// <summary>
 		/// Loads a plugin
 		/// </summary>
 		/// <param name="name">Plugin name</param>
-		public void loadPlugin(string name)
+		public void LoadPlugin(string file)
 		{
 			try
 			{
-				Type type = null;
-				foreach(Type t in System.Reflection.Assembly.LoadFile(AppDomain.CurrentDomain.BaseDirectory+"plugins/"+name+".dll").GetTypes())
-					if(t.Name == name)
-						type = t;
-				if(type == null)
-					throw new NotImplementedException("The Dll '"+name+".dll' Does not contain a Class with same name!");
-				plugins.Add(name, Activator.CreateInstance(type));
-				Console.WriteLine("Loaded Plugin: "+name+".dll");
+				Assembly ass = Assembly.LoadFrom(file);
+				foreach(Type t in ass.GetTypes())
+				{
+					if(typeof(INinssPlugin).IsAssignableFrom(t))
+					{
+						Plugins.Add((INinssPlugin)Activator.CreateInstance(t));
+					}
+				}
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("\nCould not load Plugin: "+name+"\n"+e.GetType().ToString()+": "+e.Message+"\nStacktrace:\n"+e.StackTrace+"\n");
+				Console.WriteLine("\nCould not load Plugin: "+file+"\n"+e.GetType().ToString()+": "+e.Message+"\nStacktrace:\n"+e.StackTrace+"\n");
 				if(e.InnerException != null)
 					Console.WriteLine("InnerException: "+e.InnerException.Message+"\nInner Stacktrace:\n"+e.InnerException.StackTrace);
 			}
 		}
+
 		/// <summary>
-		/// Reloads a plugin
+		/// Loads missing assemblies
 		/// </summary>
-		/// <param name="name">Plugin name</param>
-		public void reloadPlugin(string name)
+		/// <returns>The Assembly</returns>
+		/// <param name="sender">Sender</param>
+		/// <param name="e">Resolve Event Arguments</param>
+		public System.Reflection.Assembly OnAssemblyResolve(object sender, ResolveEventArgs e)
 		{
-			unloadPlugin(name);
-			loadPlugin(name);
+			if (Assembly.Load(new AssemblyName (e.Name)) != null)
+				return Assembly.Load(new AssemblyName (e.Name));
+			string name = new System.Reflection.AssemblyName(e.Name).Name;
+			return System.Reflection.Assembly.LoadFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/libs/"+name+".dll"));
+		}
+
+		private string PluginPath
+		{
+			get {
+				return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins");
+			}
 		}
 	}
 }
