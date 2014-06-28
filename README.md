@@ -6,16 +6,16 @@ beginners to improve their skills.
 
 #Plugin Example code
 ```javascript
-function PlayerJoin(name) //onJoin(name) is invoked when a player with name name joins the server
+function PlayerJoin(name) //PlayerJoin(name) is invoked when a player with name name joins the server
 {
 	Player.SendMessageTo(name, "Welcome to this server!", "gold"); //Send a welcome message to the new Player
 }
-function OnCommand(name, arg) //onCommand(name, args) is invoked when a player says something beginning with an '!'
+function OnCommand(name, arg) //OnCommand(name, args) is invoked when a player says something beginning with an '!'
 {
   if(arg.split(' ')[0] == "leave") //if command is "leave"
     Server.WunCommand("kick "+name+" Own decision"); //kick player
 }
-function ServerStart() //onStart() is invoked when the server starts
+function ServerStart() //ServerStart() is invoked when the server starts
 {
   Console.WriteLine("Loaded <Pluginname>");
 }
