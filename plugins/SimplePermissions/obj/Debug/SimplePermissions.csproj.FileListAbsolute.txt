@@ -1,5 +1,0 @@
-C:\Data\Programmieren\MonoProjects\NINSS\NINSS\bin\Debug\plugins\SimplePermissions.dll
-C:\Data\Programmieren\MonoProjects\NINSS\NINSS\bin\Debug\plugins\SimplePermissions.pdb
-C:\Data\Programmieren\MonoProjects\NINSS\plugins\SimplePermissions\obj\Debug\SimplePermissions.csprojResolveAssemblyReference.cache
-C:\Data\Programmieren\MonoProjects\NINSS\plugins\SimplePermissions\obj\Debug\SimplePermissions.dll
-C:\Data\Programmieren\MonoProjects\NINSS\plugins\SimplePermissions\obj\Debug\SimplePermissions.pdb
