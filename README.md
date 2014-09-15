@@ -13,7 +13,7 @@ function PlayerJoin(name) //PlayerJoin(name) is invoked when a player with name 
 function OnCommand(name, arg) //OnCommand(name, args) is invoked when a player says something beginning with an '!'
 {
   if(arg.split(' ')[0] == "leave") //if command is "leave"
-    Server.WunCommand("kick "+name+" Own decision"); //kick player
+    Server.RunCommand("kick "+name+" Own decision"); //kick player
 }
 function ServerStart() //ServerStart() is invoked when the server starts
 {
