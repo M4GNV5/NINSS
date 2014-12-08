@@ -6,50 +6,43 @@ using System.Collections.Generic;
 
 namespace NINSS
 {
-	/// <summary>
-	/// PluginManager class that loads, undloads and holds all .NET Plugins
-	/// </summary>
 	public class PluginManager
 	{
-		/// <summary>
-		/// List of all loaded Plugins
-		/// </summary>
-		public List<INinssPlugin> Plugins { get; internal set; }
+		public List<INinssPlugin> Plugins { get; private set; }
+
 		public PluginManager ()
 		{
-			AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+			Plugins = new List<INinssPlugin> ();
+
+			AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
 			if(!Directory.Exists(PluginPath))
 				Directory.CreateDirectory(PluginPath);
 
-			if(Directory.GetFiles(PluginPath, "*.dll").Length > 0)
+			string[] pluginFiles = Directory.GetFiles(PluginPath, "*.dll");
+			if (pluginFiles.Length > 0)
 			{
-				Plugins = new List<INinssPlugin>();
 				Console.WriteLine("Loading Plugins!");
-				foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory+"plugins", "*.dll"))
+				foreach (string file in pluginFiles)
 				{
 					Console.WriteLine("Loading Plugin: {0}", file);
-					LoadPlugin(file);
+					LoadPlugins(file);
 				}
 				Console.WriteLine("\nFinished Loading Plugins!");
 			}
 			else
+			{
 				Console.WriteLine("No Plugins found!");
-			Console.WriteLine("Plugins: {0}", Plugins.Count);
-		}
+			}
 
-		/// <summary>
-		/// Unloads a plugin
-		/// </summary>
-		/// <param name="name">Plugin name</param>
+			Console.WriteLine("{0} Plugins loaded", Plugins.Count);
+		}
+			
 		public void UnloadPlugin(string name)
 		{
 			Plugins.Remove(Plugins.First(p => p.Name == name));
 		}
-		/// <summary>
-		/// Loads a plugin
-		/// </summary>
-		/// <param name="name">Plugin name</param>
-		public void LoadPlugin(string file)
+
+		public void LoadPlugins(string file)
 		{
 			try
 			{
@@ -64,24 +57,19 @@ namespace NINSS
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("\nCould not load Plugin: "+file+"\n"+e.GetType().ToString()+": "+e.Message+"\nStacktrace:\n"+e.StackTrace+"\n");
+				Console.WriteLine("\nCould not load Plugin: {0}\n{1}\nError: {2}\nSTacktrace: {3}", Path.GetFileName(file), e.GetType(), e.Message, e.StackTrace);
 				if(e.InnerException != null)
-					Console.WriteLine("InnerException: "+e.InnerException.Message+"\nInner Stacktrace:\n"+e.InnerException.StackTrace);
+					Console.WriteLine("InnerException: {0}\nMessage: {1}\nStacktrace: {2}", e.InnerException.GetType(), e.InnerException.Message, e.InnerException.StackTrace);
 			}
 		}
-
-		/// <summary>
-		/// Loads missing assemblies
-		/// </summary>
-		/// <returns>The Assembly</returns>
-		/// <param name="sender">Sender</param>
-		/// <param name="e">Resolve Event Arguments</param>
-		public System.Reflection.Assembly OnAssemblyResolve(object sender, ResolveEventArgs e)
+			
+		private Assembly AssemblyResolve(object sender, ResolveEventArgs e)
 		{
 			if (Assembly.Load(new AssemblyName (e.Name)) != null)
 				return Assembly.Load(new AssemblyName (e.Name));
-			string name = new System.Reflection.AssemblyName(e.Name).Name;
-			return System.Reflection.Assembly.LoadFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins/libs/"+name+".dll"));
+
+			string name = new AssemblyName(e.Name).Name;
+			return Assembly.LoadFile(Path.Combine(PluginPath, "libs/"+name+".dll"));
 		}
 
 		private string PluginPath

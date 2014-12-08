@@ -1,17 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NINSS", "NINSS\NINSS.csproj", "{AAB018C4-5E0E-48B7-B7EB-21A03044ABD5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{4D356B36-5058-46EB-9049-F42F225FA457}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavascriptConnector", "plugins\JavascriptConnector\JavascriptConnector.csproj", "{F402D309-2B68-4E2C-82C8-13BF9DBE03B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePermissions", "plugins\SimplePermissions\SimplePermissions.csproj", "{269BCD64-F4FA-45A7-8106-D39DF71CBA72}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UuidConnector", "plugins\UuidConnector\UuidConnector.csproj", "{F5F95FE9-B83B-4F94-B5F1-3F13FFD8FB71}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "plugins\WebUI\WebUI.csproj", "{6AE20DE9-BE11-4876-9918-6D17820F761C}"
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "WebUI", "plugins\WebUI\WebUI.csproj", "{6AE20DE9-BE11-4876-9918-6D17820F761C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +15,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{269BCD64-F4FA-45A7-8106-D39DF71CBA72}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{269BCD64-F4FA-45A7-8106-D39DF71CBA72}.Debug|x86.Build.0 = Debug|Any CPU
-		{269BCD64-F4FA-45A7-8106-D39DF71CBA72}.Release|x86.ActiveCfg = Release|Any CPU
-		{269BCD64-F4FA-45A7-8106-D39DF71CBA72}.Release|x86.Build.0 = Release|Any CPU
 		{6AE20DE9-BE11-4876-9918-6D17820F761C}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{6AE20DE9-BE11-4876-9918-6D17820F761C}.Debug|x86.Build.0 = Debug|Any CPU
 		{6AE20DE9-BE11-4876-9918-6D17820F761C}.Release|x86.ActiveCfg = Release|Any CPU
@@ -35,15 +27,9 @@ Global
 		{F402D309-2B68-4E2C-82C8-13BF9DBE03B9}.Debug|x86.Build.0 = Debug|Any CPU
 		{F402D309-2B68-4E2C-82C8-13BF9DBE03B9}.Release|x86.ActiveCfg = Release|Any CPU
 		{F402D309-2B68-4E2C-82C8-13BF9DBE03B9}.Release|x86.Build.0 = Release|Any CPU
-		{F5F95FE9-B83B-4F94-B5F1-3F13FFD8FB71}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F5F95FE9-B83B-4F94-B5F1-3F13FFD8FB71}.Debug|x86.Build.0 = Debug|Any CPU
-		{F5F95FE9-B83B-4F94-B5F1-3F13FFD8FB71}.Release|x86.ActiveCfg = Release|Any CPU
-		{F5F95FE9-B83B-4F94-B5F1-3F13FFD8FB71}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F402D309-2B68-4E2C-82C8-13BF9DBE03B9} = {4D356B36-5058-46EB-9049-F42F225FA457}
-		{269BCD64-F4FA-45A7-8106-D39DF71CBA72} = {4D356B36-5058-46EB-9049-F42F225FA457}
-		{F5F95FE9-B83B-4F94-B5F1-3F13FFD8FB71} = {4D356B36-5058-46EB-9049-F42F225FA457}
 		{6AE20DE9-BE11-4876-9918-6D17820F761C} = {4D356B36-5058-46EB-9049-F42F225FA457}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution

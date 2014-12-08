@@ -1,110 +1,90 @@
 using System;
-using System.Text;
+using System.Diagnostics;
 
 namespace NINSS
 {
-	/// <summary>
-	/// Class that handles Server output and translate it to events
-	/// </summary>
 	public class MinecraftConnector
 	{
-		public delegate void PlayerEvent(string Player, string args);
-		/// <summary>
-		/// Occurs when a player joins
-		/// </summary>
-		public static event PlayerEvent PlayerJoin;
-		/// <summary>
-		/// Occurs when a player leaves
-		/// </summary>
-		public static event PlayerEvent PlayerLeave;
-		/// <summary>
-		/// Occurs when a player is teleported to coordinates
-		/// </summary>
-		public static event PlayerEvent PlayerPosition;
-		/// <summary>
-		/// Occurs when a player says something in chat
-		/// </summary>
-		public static event PlayerEvent ChatReceived;
-		/// <summary>
-		/// Occurs when a player writes a command in chat
-		/// </summary>
-		public static event PlayerEvent OnCommand;
+		private ServerManager serverManager;
 
-		public delegate void ServerEvent();
-		/// <summary>
-		/// Occurs when the server starts
-		/// </summary>
-		public static event ServerEvent ServerStart;
-		/// <summary>
-		/// Occurs when on stops
-		/// </summary>
-		public static event	ServerEvent ServerStop;
+		public MinecraftConnector(ServerManager serverManager)
+		{
+			this.serverManager = serverManager;
+			serverManager.OutputReceived += ReadServerOutput;
+		}
 
-		public delegate void messageRead(string message);
-		/// <summary>
-		/// List of all methods that will be invoked when a server output contains the specific key string
-		/// </summary>
-		public static System.Collections.Generic.Dictionary<string, messageRead> messageReader = new System.Collections.Generic.Dictionary<string, messageRead>
+		private void ReadServerOutput(object sender, DataReceivedEventArgs e)
 		{
-			{"joined the game", ReadJoin},
-			{"left the game", ReadLeft},
-			{"<", ReadChat},
-			{"Done", ReadStart},
-			{"Stopping the server", ReadStop},
-			{"Teleported", ReadPosition}
-		};
-		public static void OnServerMessage(string message)
-		{
-			StringBuilder sb = new StringBuilder (message);
-			sb.Remove(0, 12);
-            sb.Replace(sb.ToString().Split(':')[0], "");
-			message = sb.ToString().Trim(':', ' ', '[', ']');
-			foreach (string readerKey in messageReader.Keys)
+			string data = e.Data;
+			string info = e.Data.Substring(11);
+			string message = info.Remove(0, info.IndexOf(":")+1);
+
+			if (message.Contains("Starting minecraft server"))
+				TriggerEvent<ServerEventArgs>(ServerStart, new ServerEventArgs());
+			if (data.Contains("[Server Shutdown Thread/INFO]: Stopping server"))
+				TriggerEvent<ServerEventArgs>(ServerStop, new ServerEventArgs());
+
+			if (message.Contains("joined the game"))
 			{
-				if (message.Contains(readerKey))
+				string name = message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) [0];
+				API.Player player = new API.Player (name);
+				PlayerJoinedEventArgs eventArgs = new PlayerJoinedEventArgs (player);
+
+				TriggerEvent<PlayerJoinedEventArgs>(PlayerJoin, eventArgs);
+			}
+			if (message.Contains("left the game"))
+			{
+				string name = message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) [0];
+				API.Player player = new API.Player (name);
+				PlayerLeftEventArgs eventArgs = new PlayerLeftEventArgs (player);
+
+				TriggerEvent<PlayerLeftEventArgs>(PlayerLeft, eventArgs);
+			}
+
+			if (message.Contains("<") && message.Contains(">"))
+			{
+				string[] split = message.Split(new char[] { '<', '>' }, StringSplitOptions.RemoveEmptyEntries);
+				string name = split [1];
+				string chat = split[2].Trim();
+				API.Player player = new API.Player(name);
+
+				PlayerChatEventArgs eventArgs = new PlayerChatEventArgs (player, chat);
+				TriggerEvent<PlayerChatEventArgs>(PlayerChatReceived, eventArgs);
+			}
+			if (!message.Contains("<") && message.Contains("Teleported"))
+			{
+				string[] split = message.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+				string name = split [1];
+				API.Player player = new API.Player (name);
+				string position = split [split.Length - 3] + " " + split [split.Length - 2] + " " + split [split.Length - 1];
+
+				PlayerPositionEventArgs eventArgs = new PlayerPositionEventArgs (player, position);
+				TriggerEvent<PlayerPositionEventArgs>(PlayerPositionReceived, eventArgs);
+			}
+		}
+		private void TriggerEvent<T>(EventHandler<T> ev, T args)
+			where T : EventArgs
+		{
+			if (ev != null)
+			{
+				try
 				{
-					messageReader [readerKey](message);
+					ev(this, args);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine("Error triggering event {0}: {1}\nMessage: {2}\nStacktrace: {3}", ev.GetType(), e.GetType(), e.Message, e.StackTrace);
 				}
 			}
 		}
-		
-		public static void ReadPosition(string message)
-		{
-			API.Player.onlinePlayer[message.Split(' ')[1]].Position = message.Split(' ')[3].Replace(",", " ");
-			if(PlayerPosition != null)
-				PlayerPosition(message.Split(' ')[1], message.Split(' ')[3].Replace(",", " "));
-		}
-		public static void ReadJoin(string message)
-		{
-			API.Player.onlinePlayer.Add(message.Split(' ')[0], new API.Player(message.Split(' ')[0]));
-			if(PlayerJoin != null)
-				PlayerJoin(message.Split(' ')[0], null);
-		}
-		public static void ReadLeft(string message)
-		{
-			API.Player.onlinePlayer.Remove(message.Split(' ')[0]);
-			if(PlayerJoin != null)
-				PlayerLeave(message.Split(' ')[0], null);
-		}
-		public static void ReadChat(string message)
-		{
-			string player = message.Split('<', '>')[1].Trim();
-			string chat = message.Replace("<"+message.Split('<', '>')[1]+">", "").Trim();
-			if(ChatReceived != null)
-				ChatReceived(player, chat);
-			if(chat.Substring(0, 1) == "!")
-				OnCommand(player, chat.TrimStart('!'));
-		}
-		public static void ReadStart(string message)
-		{
-			if(ServerStart != null)
-				ServerStart();
-		}
-		public static void ReadStop(string message)
-		{
-			if(ServerStop != null)
-				ServerStop();
-		}
+
+		public static event EventHandler<PlayerJoinedEventArgs> PlayerJoin;
+		public static event EventHandler<PlayerLeftEventArgs> PlayerLeft;
+		public static event EventHandler<PlayerChatEventArgs> PlayerChatReceived;
+		public static event EventHandler<PlayerPositionEventArgs> PlayerPositionReceived;
+
+		public static event EventHandler<ServerEventArgs> ServerStart;
+		public static event EventHandler<ServerEventArgs> ServerStop;
 	}
 }
 

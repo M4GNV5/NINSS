@@ -1,62 +1,80 @@
 using System;
+using System.Text;
+
 using NINSS;
 namespace JavascriptConnector
 {
-	/// <summary>
-	/// Javascript connector class that calls the events in all javascript plugins
-	/// </summary>
 	public class JavascriptConnector : INinssPlugin
 	{
 		public string Name { get { return "JavascriptConnector"; } }
 
-		public JavascriptPluginManager manager;
+		private JavascriptPluginManager manager;
+
 		public JavascriptConnector()
 		{
 			manager = new JavascriptPluginManager();
-			MinecraftConnector.PlayerJoin += onJoin;
-			MinecraftConnector.PlayerLeave += onLeave;
-			MinecraftConnector.PlayerPosition += onPosition;
-			MinecraftConnector.ChatReceived += onChat;
-			MinecraftConnector.OnCommand += onCommand;
+			MinecraftConnector.PlayerJoin += PlayerJoin;
+			MinecraftConnector.PlayerLeft += PlayerLeft;
+			MinecraftConnector.PlayerPositionReceived += PlayerPosition;
+			MinecraftConnector.PlayerChatReceived += PlayerChat;
 			
-			MinecraftConnector.ServerStart += onStart;
-			MinecraftConnector.ServerStop += onStop;
+			MinecraftConnector.ServerStart += ServerStart;
+			MinecraftConnector.ServerStop += ServerStop;
 		}
 		
-		public void onJoin(string name, string misc)
+		private void PlayerJoin(object sender, PlayerJoinedEventArgs e)
 		{
-            manager.executeAll("PlayerJoin(\""+name+"\");");
+			TriggerEvent("PlayerJoin", e.Player.Name);
 		}
-		public void onLeave(string name, string misc)
+		private void PlayerLeft(object sender, PlayerLeftEventArgs e)
 		{
-            manager.executeAll("PlayerLeave(\""+name+"\");");
+			TriggerEvent("PlayerLeft", e.Player.Name);
 		}
-		public void onPosition(string name, string position)
+		private void PlayerPosition(object sender, PlayerPositionEventArgs e)
 		{
-            manager.executeAll("PlayerPosition(\""+name+"\", \""+position+"\");");
+			TriggerEvent("PlayerPosition", e.Player.Name, e.Position);
 		}
-		public void onChat(string name, string message)
+		private void PlayerChat(object sender, PlayerChatEventArgs e)
 		{
-            manager.executeAll("ChatReceived(\""+name+"\", \""+message+"\");");
-		}
-		public void onCommand(string name, string args)
-		{
-			if(args.Split(' ')[0] == "reload")
-				manager = new JavascriptPluginManager();
-			else if(args.Split(' ')[0] == "unload" && args.Split(' ').Length > 1)
-				manager.unloadPlugin(args.Split(' ')[1]);
-			else if(args.Split(' ')[0] == "load" && args.Split(' ').Length > 1)
-				manager.loadPlugin("./plugins/"+args.Split(' ')[1]);
-            manager.executeAll("OnCommand(\""+name+"\", \""+args+"\");");
+			TriggerEvent("ChatReceived", e.Player.Name, e.Message);
 		}
 		
-		public void onStart()
+		private void ServerStart(object sender, ServerEventArgs e)
 		{
-            manager.executeAll("ServerStart();");
+			TriggerEvent("ServerStart");
 		}
-		public void onStop()
+		private void ServerStop(object sender, ServerEventArgs e)
 		{
-            manager.executeAll("ServerStop();");
+			TriggerEvent("ServerStop");
+		}
+
+		private void TriggerEvent(string name, params object[] args)
+		{
+			foreach (JavascriptPlugin plugin in manager.Plugins)
+			{
+				for(int i = 0; i < args.Length; i++)
+				{
+					plugin.Runtime.SetParameter("arg" + i, args [i]);
+				}
+				StringBuilder sb = new StringBuilder ();
+				sb.Append("if(typeof ");
+				sb.Append(name);
+				sb.Append(" != 'undefined') ");
+				sb.Append(name);
+				string s = sb.ToString();
+				sb.Append("(");
+				for (int i = 0; i < args.Length; i++)
+				{
+					sb.Append("arg");
+					sb.Append(i);
+					if(i != args.Length -1)
+						sb.Append(", ");
+				}
+				sb.Append(");");
+
+				string source = sb.ToString();
+				plugin.Run(source);
+			}
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace NINSS
 			{}
 			public Player(string _name)
 			{
-				Name = _name;
+				Name = _name.Trim();
 			}
 			public Player (string _name, string _position)
 			{

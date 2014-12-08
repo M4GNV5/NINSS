@@ -1,18 +1,14 @@
 using System;
 using System.IO;
-using NINSS;
-using NINSS.API;
+using System.Threading;
 using System.Runtime.InteropServices;
 
 namespace NINSS
 {
-	/// <summary>
-	/// Main class
-	/// </summary>
 	public class MainClass
 	{
-		internal static System.Threading.Thread inputThread;
-		internal static MinecraftServerManager serverManager;
+		internal static Thread inputThread;
+		internal static ServerManager serverManager;
 		public static PluginManager pluginManager;
 		
 		public static int Main (string[] args)
@@ -26,7 +22,7 @@ namespace NINSS
 					Console.ReadKey();
 					return 1;
 				}
-				Config config = new Config("NINSS");
+				API.Config config = new API.Config("NINSS");
 				if(config.GetValue("EnablePlugins") == "true")
 					pluginManager = new PluginManager();
 				try
@@ -40,32 +36,34 @@ namespace NINSS
 				}
 				if(config.GetValue("ServerFile") == "%auto%")
 				{
-					if (Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.jar").Length == 0)
+					string[] jarFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.jar");
+
+					if (jarFiles.Length == 0)
 					{
 						System.Console.WriteLine("No *.jar File found! Please Download a Minecraftserver *.jar file from http://minecraft.net");
 						System.Console.WriteLine("Press any key to exit");
 						System.Console.ReadKey();
-						System.Environment.Exit(0);
+						return 1;
 					}
-					else if (Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.jar").Length > 1)
+					else if (jarFiles.Length > 1)
 					{
-						System.Console.WriteLine("Found "+Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.jar").Length+
-						                         " *.jar Files please remove "+(Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.jar").Length-1)+
-						                         " of them or select on in the config\n");
-						System.Console.WriteLine("Press any key to exit");
+						System.Console.WriteLine("Found {0} *.jar Files please remove {1} of them or select one in the config", jarFiles.Length, (jarFiles.Length-1));
+						System.Console.WriteLine("\nPress any key to exit");
 						System.Console.ReadKey();
 						return 1;
 					}
 					else
 					{
-						serverManager = new MinecraftServerManager(Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.jar")[0]);
+						serverManager = new ServerManager(jarFiles[0]);
 					}
 				}
 				else
 				{
-					serverManager = new MinecraftServerManager(config.GetValue("ServerFile"));
+					serverManager = new ServerManager(config.GetValue("ServerFile"));
 				}
-				inputThread = new System.Threading.Thread(new System.Threading.ThreadStart(MinecraftServerManager.ReadInputs));
+
+				ThreadStart ts = new ThreadStart(ReadInputs);
+				inputThread = new Thread(ts);
 				inputThread.Start();
 			}
 			catch (Exception e)
@@ -75,6 +73,19 @@ namespace NINSS
 					Console.WriteLine("InnerException:\nMessage:\n"+e.InnerException.Message+"\nStacktrace:\n"+e.InnerException.StackTrace);
 			}
 			return 0;
+		}
+
+		private static void ReadInputs()
+		{
+			string message = "";
+			do
+			{
+				message = Console.ReadLine();
+				if (!string.IsNullOrWhiteSpace(message))
+				{
+					serverManager.WriteLine(message);
+				}
+			} while(message != "stop");
 		}
 		
 		[DllImport("Kernel32")]
@@ -90,10 +101,10 @@ namespace NINSS
 		}
 		public static bool OnExit(CtrlTypes CtrlType)
 		{
+			serverManager.WriteLine("stop");
 			if(inputThread == null)
 				return true;
 			inputThread.Abort();
-			serverManager.WriteMessage("stop");
 			return true;
 		}
 	}

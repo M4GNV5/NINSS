@@ -15,7 +15,7 @@ namespace NINSS
 			/// <param name="jsonMessage">Json message for tellraw command</param>
 			public static void BroadcastMessage(string jsonMessage)
 			{
-				MainClass.serverManager.WriteMessage("tellraw @a "+jsonMessage);
+				MainClass.serverManager.WriteLine("tellraw @a "+jsonMessage);
 			}
 			/// <summary>
 			/// Broadcasts a message to all Players
@@ -33,7 +33,7 @@ namespace NINSS
 			/// <example>runCommand("kick Notch");</example>
 			public static void RunCommand(string command)
 			{
-				MainClass.serverManager.WriteMessage(command);
+				MainClass.serverManager.WriteLine(command);
 			}
 		}
 	}
