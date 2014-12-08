@@ -12,21 +12,14 @@ function PlayerLeave(name) //PlayerLeave(name) is invoked when a player with nam
 
 function ChatReceived(name, message) //ChatReceived(name, message) is invoked when a Player says something
 {
-	Console.WriteLine("Name '"+name+"' --- '"+message+"'");
 	if(message.toUpperCase() == message && message.length > 3) //check if message is caps only and longer than 3 characters long
-		Server.RunCommand("kick "+name+" Please do not use caps lock!") //kick player cause he used caps
-}
+		Server.RunCommand("kick "+name+" Please do not use caps lock!"); //kick player cause he used caps
 
-function OnCommand(name, arg) //OnCommand(name, args) is invoked when a player says something beginning with an '!'
-{
-	Console.WriteLine("Name '"+name+"' -c- '"+arg+"'");
-	var args = arg.split(' '); //convert arg string to string array
-	if(args[0] == "tpme") //check if command is 'tpme'
-		Server.RunCommand("tp "+args[1]+" "+name); //teleport sender to named player
-	else if(args[0] == "tpto") //check if command is 'tpto'
-		Server.RunCommand("tp "+name+" "+args[1]); //teleport named player to sender
-	else if(args[0] == "light") //check if command is 'light'
-		Server.RunCommand("tp "+name+" ~ ~ ~") //you can use this command to call onPosition at the current position of the player
+	Console.WriteLine("Message: "+message+"\nIs .light: "+(message.toLowerCase().trim() == ".light"));
+	if(message.toLowerCase() == ".light")
+		Player.RefreshPosition(name);
+	else if(message.split(' ')[0] == '.tpme')
+		Server.RunCommand("tp "+name+" "+message.split(' ')[1]);
 }
 
 function PlayerPosition(name, position) //PlayerPosition is invoked when a player is teleported to specific coordinates
@@ -36,10 +29,10 @@ function PlayerPosition(name, position) //PlayerPosition is invoked when a playe
 
 function ServerStart() //ServerStart() is invoked when the server starts
 {
-	Console.WriteLine("Example Plugin active!\nCommands: !tpto <player>, !tpme <player> and !light\nThis Plugin has an anti-caps lock function!"); //display message to server log
+	Console.WriteLine("Example Plugin active!\nCommands: .tpme <player> and .light\nThis Plugin has an anti-caps lock function!"); //display message to server log
 }
 
 function ServerStop() //ServerStop() is invoked when the server stops
 {
-	Console.Beep(); //note that if you play this too often java throws an exception cause it waited to long for the server Gui
+	Console.Beep();
 }
