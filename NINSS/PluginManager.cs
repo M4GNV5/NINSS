@@ -57,9 +57,9 @@ namespace NINSS
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("\nCould not load Plugin: {0}\n{1}\nError: {2}\nSTacktrace: {3}", Path.GetFileName(file), e.GetType(), e.Message, e.StackTrace);
+				Console.WriteLine("\n/!\\ Could not load Plugin: {0}\n{1}\nError: {2}\nStacktrace: {3}\n", Path.GetFileName(file), e.GetType(), e.Message, e.StackTrace);
 				if(e.InnerException != null)
-					Console.WriteLine("InnerException: {0}\nMessage: {1}\nStacktrace: {2}", e.InnerException.GetType(), e.InnerException.Message, e.InnerException.StackTrace);
+					Console.WriteLine("InnerException: {0}\nMessage: {1}\nStacktrace: {2}\n", e.InnerException.GetType(), e.InnerException.Message, e.InnerException.StackTrace);
 			}
 		}
 			

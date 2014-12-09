@@ -8,7 +8,6 @@
 </root>
 
 */
-
 var welcomeMessage;
 var welcomeColor;
 var allowedCapsPercent;
@@ -52,14 +51,14 @@ function ChatReceived(name, message) //ChatReceived(name, message) is invoked wh
 		RefreshValues(); //refresh the variables
 		Player.SendMessageTo(name, "Welcome Message Color set to this color!", args[1]); //send sucess message to sender
 	}
-	else if(arg[0] == ".welcome_refresh") //if command is 'welcome_refresh'
+	else if(args[0] == ".welcome_refresh") //if command is 'welcome_refresh'
 		RefreshValues(); //refresh the variables
 
 	var upper = 0; //temporary variable with upper case letter count
 	for(var i = 0; i < message.length; i++) //loop through all letters in message
 		if(message.substring(i, i+1).toUpperCase() == message.substring(i, i+1)) //if letter is uppercase letter
 			upper++; //add 1 to uppercase
-	if(upper/message.length*100 > allowedCapsPercent) //if uppercase percentage is more than allowed value
+	if(message.length > 5 && upper/message.length*100 > allowedCapsPercent) //if uppercase percentage is more than allowed value
 		Server.RunCommand("kick "+name+" A maximum of "+allowedCapsPercent+"% Upper Case Letters is allowed you had "+upper/message.length*100+"%"); //kick player
 }
 

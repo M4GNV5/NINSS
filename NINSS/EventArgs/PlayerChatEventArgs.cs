@@ -6,7 +6,7 @@ namespace NINSS
 	{
 		public string Message { get; private set; }
 
-		public PlayerChatEventArgs (API.Player player, string message) : base(player)
+		public PlayerChatEventArgs (string player, string message) : base(player)
 		{
 			this.Message = message;
 		}

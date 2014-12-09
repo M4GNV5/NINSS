@@ -4,9 +4,9 @@ namespace NINSS
 {
 	public abstract class PlayerEventArgs : EventArgs
 	{
-		public API.Player Player { get; protected set; }
+		public string Player { get; protected set; }
 
-		public PlayerEventArgs (API.Player player)
+		public PlayerEventArgs (string player)
 		{
 			this.Player = player;
 		}

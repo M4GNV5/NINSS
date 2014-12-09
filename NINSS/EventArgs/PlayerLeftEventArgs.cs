@@ -4,7 +4,7 @@ namespace NINSS
 {
 	public class PlayerLeftEventArgs : PlayerEventArgs
 	{
-		public PlayerLeftEventArgs(API.Player player) : base(player)
+		public PlayerLeftEventArgs(string player) : base(player)
 		{
 		}
 	}

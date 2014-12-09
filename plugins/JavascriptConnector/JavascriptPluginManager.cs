@@ -19,7 +19,7 @@ namespace JavascriptConnector
 			{
 				List<JavascriptPlugin> _plugins = new List<JavascriptPlugin> ();
 
-				Console.WriteLine("Loading Javascript Plugins!");
+				Console.WriteLine("\nLoading Javascript Plugins!");
 				foreach (string file in pluginFiles)
 				{
 					Console.WriteLine("Loading Plugin: {0}", file);
@@ -29,13 +29,13 @@ namespace JavascriptConnector
 					_plugins.Add(plugin);
 				}
 				Plugins = _plugins.ToArray();
-				Console.WriteLine("\nFinished Loading Javascript Plugins!");
+				Console.WriteLine("Finished Loading Javascript Plugins!");
 			}
 			else
 			{
 				Console.WriteLine("No Javascript Plugins found!");
 			}
-			Console.WriteLine("{0} Javascript Plugins loaded", Plugins.Length);
+			Console.WriteLine("{0} Javascript Plugins loaded\n", Plugins.Length);
 		}
 
 

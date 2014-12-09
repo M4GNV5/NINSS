@@ -4,8 +4,14 @@ namespace JavascriptConnector.API
 {
 	public class Console
 	{
-		public Console ()
-		{}
+		public static Console Instance { get; private set; }
+		static Console()
+		{
+			Instance = new Console();
+		}
+		private Console()
+		{ }
+
 		public static void WriteLine(string message)
 		{
 			System.Console.WriteLine(message);

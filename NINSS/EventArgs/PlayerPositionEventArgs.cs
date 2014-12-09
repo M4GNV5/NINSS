@@ -6,7 +6,7 @@ namespace NINSS
 	{
 		public string Position { get; private set; }
 
-		public PlayerPositionEventArgs(API.Player player, string position) : base(player)
+		public PlayerPositionEventArgs(string player, string position) : base(player)
 		{
 			this.Position = position;
 		}

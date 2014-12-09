@@ -17,8 +17,6 @@ namespace NINSS
 			string executable = config.GetValue("JavaExecutable");
 			string arguments = config.GetValue("JavaArguments").Replace("%jar%", "\""+jarFile+"\"");
 
-			Console.WriteLine("\nStarting java with arguments: "+arguments+"\n");
-
 			mc = new Process();
 			mc.StartInfo = new ProcessStartInfo(executable, arguments);
 			mc.StartInfo.UseShellExecute = false;
@@ -30,11 +28,14 @@ namespace NINSS
 			mc.OutputDataReceived += ReadMessage;
 			mc.ErrorDataReceived += ReadMessage;
 
+			connector = new MinecraftConnector (this);
+		}
+		public void Start()
+		{
+			Console.WriteLine("\nStarting java with arguments: {0}\n", mc.StartInfo.Arguments);
 			mc.Start();
 			mc.BeginOutputReadLine();
 			mc.BeginErrorReadLine();
-
-			connector = new MinecraftConnector (this);
 		}
 		public void WriteLine(string message)
 		{

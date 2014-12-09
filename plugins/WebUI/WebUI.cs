@@ -18,7 +18,7 @@ namespace WebUI
 		public WebUI ()
 		{
 			NINSS.MinecraftConnector.ServerStop += OnStop;
-			NINSS.MinecraftConnector.OnCommand += OnCommand;
+			NINSS.MinecraftConnector.PlayerChatReceived += ChatReceived;
 			OnRequest += LogAction;
 			OnRequest += PluginsAction;
 			OnRequest += CommandAction;
@@ -28,7 +28,8 @@ namespace WebUI
 			try
 			{
 				NINSS.API.Config config = new NINSS.API.Config("WebUI");
-				System.Net.IPAddress.TryParse(config.GetValue("IP_Adress"), out ip);
+				string _ip = config.GetValue("IP_Adress");
+				this.ip = System.Net.IPAddress.Parse(_ip);
 				port = Convert.ToInt32(config.GetValue("Port"));
 				serverThread = new Thread(new ThreadStart(listen));
 				serverThread.Start();
@@ -40,12 +41,12 @@ namespace WebUI
 					Console.WriteLine("InnerException: "+e.InnerException.Message+"\nInner Stacktrace:\n"+e.InnerException.StackTrace);
 			}
 		}
-		public void OnCommand(string name, string arg)
+		public void ChatReceived(object sender, PlayerChatEventArgs e)
 		{
-			if(arg == "webui stop")
-				OnStop();
+			if(e.Message == ".webui stop")
+				OnStop(null, null);
 		}
-		public void OnStop()
+		public void OnStop(object sender, ServerEventArgs e)
 		{
 			this.is_active = false;
 			this.listener.Stop();
@@ -137,7 +138,8 @@ namespace WebUI
 				return false;
 
 			p.writeSuccess("text/html");
-			NINSS.API.Server.RunCommand(url.Split('?')[2].Replace("%20", " "));
+			string command = url.Split('?') [2].Replace("%20", " ");
+			NINSS.API.Server.Instance.RunCommand(command);
 			p.outputStream.WriteLine("true");
 			return true;
 		}

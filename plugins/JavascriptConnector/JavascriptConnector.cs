@@ -24,19 +24,19 @@ namespace JavascriptConnector
 		
 		private void PlayerJoin(object sender, PlayerJoinedEventArgs e)
 		{
-			TriggerEvent("PlayerJoin", e.Player.Name);
+			TriggerEvent("PlayerJoin", e.Player);
 		}
 		private void PlayerLeft(object sender, PlayerLeftEventArgs e)
 		{
-			TriggerEvent("PlayerLeft", e.Player.Name);
+			TriggerEvent("PlayerLeft", e.Player);
 		}
 		private void PlayerPosition(object sender, PlayerPositionEventArgs e)
 		{
-			TriggerEvent("PlayerPosition", e.Player.Name, e.Position);
+			TriggerEvent("PlayerPosition", e.Player, e.Position);
 		}
 		private void PlayerChat(object sender, PlayerChatEventArgs e)
 		{
-			TriggerEvent("ChatReceived", e.Player.Name, e.Message);
+			TriggerEvent("ChatReceived", e.Player, e.Message);
 		}
 		
 		private void ServerStart(object sender, ServerEventArgs e)

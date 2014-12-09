@@ -27,16 +27,14 @@ namespace NINSS
 			if (message.Contains("joined the game"))
 			{
 				string name = message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) [0];
-				API.Player player = new API.Player (name);
-				PlayerJoinedEventArgs eventArgs = new PlayerJoinedEventArgs (player);
+				PlayerJoinedEventArgs eventArgs = new PlayerJoinedEventArgs (name);
 
 				TriggerEvent<PlayerJoinedEventArgs>(PlayerJoin, eventArgs);
 			}
 			if (message.Contains("left the game"))
 			{
 				string name = message.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) [0];
-				API.Player player = new API.Player (name);
-				PlayerLeftEventArgs eventArgs = new PlayerLeftEventArgs (player);
+				PlayerLeftEventArgs eventArgs = new PlayerLeftEventArgs (name);
 
 				TriggerEvent<PlayerLeftEventArgs>(PlayerLeft, eventArgs);
 			}
@@ -46,19 +44,17 @@ namespace NINSS
 				string[] split = message.Split(new char[] { '<', '>' }, StringSplitOptions.RemoveEmptyEntries);
 				string name = split [1];
 				string chat = split[2].Trim();
-				API.Player player = new API.Player(name);
 
-				PlayerChatEventArgs eventArgs = new PlayerChatEventArgs (player, chat);
+				PlayerChatEventArgs eventArgs = new PlayerChatEventArgs (name, chat);
 				TriggerEvent<PlayerChatEventArgs>(PlayerChatReceived, eventArgs);
 			}
 			if (!message.Contains("<") && message.Contains("Teleported"))
 			{
 				string[] split = message.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
 				string name = split [1];
-				API.Player player = new API.Player (name);
 				string position = split [split.Length - 3] + " " + split [split.Length - 2] + " " + split [split.Length - 1];
 
-				PlayerPositionEventArgs eventArgs = new PlayerPositionEventArgs (player, position);
+				PlayerPositionEventArgs eventArgs = new PlayerPositionEventArgs (name, position);
 				TriggerEvent<PlayerPositionEventArgs>(PlayerPositionReceived, eventArgs);
 			}
 		}

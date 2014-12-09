@@ -112,7 +112,7 @@ namespace WebUI
 		public HttpServer(string ip, int port)
 		{
 			this.port = port;
-			IPAddress.TryParse(ip, out this.ip);
+			this.ip = System.Net.IPAddress.Parse(ip);
 		}
 		
 		public void listen()

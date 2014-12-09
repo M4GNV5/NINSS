@@ -7,7 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{4D35
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavascriptConnector", "plugins\JavascriptConnector\JavascriptConnector.csproj", "{F402D309-2B68-4E2C-82C8-13BF9DBE03B9}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "WebUI", "plugins\WebUI\WebUI.csproj", "{6AE20DE9-BE11-4876-9918-6D17820F761C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "plugins\WebUI\WebUI.csproj", "{6AE20DE9-BE11-4876-9918-6D17820F761C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2CC314F1-64BD-4368-9B45-CF3832D80957}"
+	ProjectSection(SolutionItems) = preProject
+		Examples\advancedJavascript.js = Examples\advancedJavascript.js
+		Examples\basicJavascript.js = Examples\basicJavascript.js
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

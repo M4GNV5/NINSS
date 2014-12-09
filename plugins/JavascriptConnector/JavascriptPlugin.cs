@@ -14,15 +14,22 @@ namespace JavascriptConnector
 			this.Name = name;
 
 			Runtime = new JavascriptContext ();
-			Runtime.Run(source);
-			Runtime.SetParameter("Console", new API.Console ());
-			Runtime.SetParameter("Player", new NINSS.API.Player ());
-			Runtime.SetParameter("Server", new NINSS.API.Server ());
+			Runtime.SetParameter("Console", API.Console.Instance);
+			Runtime.SetParameter("Player", NINSS.API.Player.Instance);
+			Runtime.SetParameter("Server", NINSS.API.Server.Instance);
 			Runtime.SetParameter("Config", new NINSS.API.Config (name));
+			Run(source);
 		}
 		internal void Run(string source)
 		{
-			Runtime.Run(source);
+			try
+			{
+				Runtime.Run(source);
+			}
+			catch (JavascriptException e)
+			{
+				Console.WriteLine("\n/!\\ Error in Javascript Plugin {0}\nError: {1}\nLine {2}, Column {3} to {4}\n", Name, e.Message, e.Line, e.StartColumn, e.EndColumn);
+			}
 		}
 	}
 }

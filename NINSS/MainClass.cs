@@ -22,9 +22,9 @@ namespace NINSS
 					Console.ReadKey();
 					return 1;
 				}
+
 				API.Config config = new API.Config("NINSS");
-				if(config.GetValue("EnablePlugins") == "true")
-					pluginManager = new PluginManager();
+
 				try
 				{
 					SetConsoleCtrlHandler(new HandlerRoutine(OnExit), true);
@@ -61,6 +61,10 @@ namespace NINSS
 				{
 					serverManager = new ServerManager(config.GetValue("ServerFile"));
 				}
+				if(config.GetValue("EnablePlugins") == "true")
+					pluginManager = new PluginManager();
+
+				serverManager.Start();
 
 				ThreadStart ts = new ThreadStart(ReadInputs);
 				inputThread = new Thread(ts);
