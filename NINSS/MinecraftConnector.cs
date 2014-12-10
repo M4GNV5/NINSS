@@ -15,6 +15,9 @@ namespace NINSS
 
 		private void ReadServerOutput(object sender, DataReceivedEventArgs e)
 		{
+			if (string.IsNullOrWhiteSpace(e.Data) || e.Data.Length < 12 || !e.Data.Contains(":"))
+				return;
+
 			string data = e.Data;
 			string info = e.Data.Substring(11);
 			string message = info.Remove(0, info.IndexOf(":")+1);
