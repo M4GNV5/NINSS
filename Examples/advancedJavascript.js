@@ -56,7 +56,8 @@ function ChatReceived(name, message) //ChatReceived(name, message) is invoked wh
 
 	var upper = 0; //temporary variable with upper case letter count
 	for(var i = 0; i < message.length; i++) //loop through all letters in message
-		if(message.substring(i, i+1).toUpperCase() == message.substring(i, i+1)) //if letter is uppercase letter
+	    if (message.substring(i, i + 1).toUpperCase() == message.substring(i, i + 1) && (message.substring(i, i + 1).toUpperCase() != message.substring(i, i + 1).toLowerCase())) 
+                //  ^^  if letter is uppercase letter -  second part after && elimates things like numbers and special characters that have no "case"
 			upper++; //add 1 to uppercase
 	if(message.length > 5 && upper/message.length*100 > allowedCapsPercent) //if uppercase percentage is more than allowed value
 		Server.RunCommand("kick "+name+" A maximum of "+allowedCapsPercent+"% Upper Case Letters is allowed you had "+upper/message.length*100+"%"); //kick player
